@@ -12,10 +12,20 @@ namespace ToolRentalSystem.Web.Controllers
 {
     public class AppController : Controller
     {
-        public IActionResult Tool()
+        private readonly ToolRentalSystemDBContext _context;
+
+        public AppController(ToolRentalSystemDBContext context)
         {
-            return View();
+            _context = context;
         }
+
+        public async Task<IActionResult> Tool()
+        {
+            var tools = await _context.Tool.ToArrayAsync();
+
+            return View(tools);
+        }
+
         public IActionResult Index()
         {
             return View();

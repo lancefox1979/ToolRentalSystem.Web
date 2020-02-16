@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <UserSecretsId>aspnet-ToolRentalSystem.Web-DBCF54BF-DC41-42A5-A862-794F23A5794A</UserSecretsId>
+    <NoWarn>1030;</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest"/>
