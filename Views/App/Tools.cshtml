@@ -1,0 +1,28 @@
+@model List<ToolRentalSystem.Web.ViewModels.ToolsModel>
+
+@{
+    ViewBag.Title = "Tools";
+}
+
+<h3>Tools</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Brand</th>
+            <th>Trade Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Type</td>
+                <td>@item.Brand</td>
+                <td>@item.TradeName</td>
+            </tr>
+        }
+    </tbody>
+</table>
