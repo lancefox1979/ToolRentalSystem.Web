@@ -15,6 +15,7 @@ namespace ToolRentalSystem.Web.Models.Database
         public string ToolBrand { get; set; }
         public string TradeName { get; set; }
 
+        public ToolClassification ToolClassification { get; set; }
         public ICollection<Tool> Tool { get; set; }
     }
 }
