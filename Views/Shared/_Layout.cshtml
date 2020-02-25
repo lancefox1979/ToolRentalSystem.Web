@@ -30,10 +30,19 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="App" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="App" asp-action="Tools">Tools</a></li>
-                    <li><a asp-area="" asp-controller="App" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="App" asp-action="Contact">Contact</a></li>
+                    <!-- the correct nav-bar item will be active for each page -->
+                    <li class="@(ViewData["Title"].ToString() == "Home Page" ? "nav-item active" : "nav-item")">
+                        <a asp-area="" asp-controller="App" asp-action="Index">Home</a>
+                    </li>
+                    <li class="@(ViewData["Title"].ToString() == "Tools" ? "nav-item active" : "nav-item")">
+                        <a asp-area="" asp-controller="App" asp-action="Tools">Tools</a>
+                    </li>
+                    <li class="@(ViewData["Title"].ToString() == "About" ? "nav-item active" : "nav-item")">
+                        <a asp-area="" asp-controller="App" asp-action="About">About</a>
+                    </li>
+                    <li class="@(ViewData["Title"].ToString() == "Contact" ? "nav-item active" : "nav-item")">
+                        <a asp-area="" asp-controller="App" asp-action="Contact">Contact</a>
+                    </li>
                 </ul>
                 <partial name="_LoginPartial" />
             </div>

@@ -7,7 +7,7 @@
 {
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "App", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
-            <li>
+            <li class="@(ViewData["Title"].ToString() == "Manage" ? "nav-item active" : "nav-item")">
                 <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
             </li>
             <li>
@@ -19,7 +19,12 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
-        <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+        <!-- the correct nav-bar item will be active for each page -->
+        <li class="@(ViewData["Title"].ToString() == "Register" ? "nav-item active" : "nav-item")">
+            <a asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="@(ViewData["Title"].ToString() == "Log in" ? "nav-item active" : "nav-item")">
+            <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
     </ul>
 }
