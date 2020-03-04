@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@{
+    // set page title variable
+    var currentPageTitle = "";
+    if (ViewData["Title"] != null) { // this prevents errors if ViewData not set
+        currentPageTitle = ViewData["Title"].ToString();
+    }
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -31,16 +39,16 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <!-- the correct nav-bar item will be active for each page -->
-                    <li class="@(ViewData["Title"].ToString() == "Home Page" ? "nav-item active" : "nav-item")">
+                    <li class="nav-item @(currentPageTitle == "Home Page" ? "active" : "")">
                         <a asp-area="" asp-controller="App" asp-action="Index">Home</a>
                     </li>
-                    <li class="@(ViewData["Title"].ToString() == "Tools" ? "nav-item active" : "nav-item")">
+                    <li class="nav-item @(currentPageTitle == "Tools" ? "active" : "")">
                         <a asp-area="" asp-controller="App" asp-action="Tools">Tools</a>
                     </li>
-                    <li class="@(ViewData["Title"].ToString() == "About" ? "nav-item active" : "nav-item")">
+                    <li class="nav-item @(currentPageTitle == "About" ? "active" : "")">
                         <a asp-area="" asp-controller="App" asp-action="About">About</a>
                     </li>
-                    <li class="@(ViewData["Title"].ToString() == "Contact" ? "nav-item active" : "nav-item")">
+                    <li class="nav-item @(currentPageTitle == "Contact" ? "active" : "")">
                         <a asp-area="" asp-controller="App" asp-action="Contact">Contact</a>
                     </li>
                 </ul>

@@ -1,3 +1,11 @@
+@{
+    // set page title variable
+    var currentPageTitle = "";
+    if (ViewData["Title"] != null) { // this prevents errors if ViewData not set
+        currentPageTitle = ViewData["Title"].ToString();
+    }
+}
+
 @using Microsoft.AspNetCore.Identity
 
 @inject SignInManager<IdentityUser> SignInManager
@@ -7,10 +15,10 @@
 {
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "App", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
-            <li class="@(ViewData["Title"].ToString() == "Manage" ? "nav-item active" : "nav-item")">
+            <li class="nav-item">
                 <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
             </li>
-            <li>
+            <li class="nav-item">
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
             </li>
         </ul>
@@ -20,10 +28,10 @@ else
 {
     <ul class="nav navbar-nav navbar-right">
         <!-- the correct nav-bar item will be active for each page -->
-        <li class="@(ViewData["Title"].ToString() == "Register" ? "nav-item active" : "nav-item")">
+        <li class="nav-item @(currentPageTitle == "Register" ? "active" : "")">
             <a asp-area="Identity" asp-page="/Account/Register">Register</a>
         </li>
-        <li class="@(ViewData["Title"].ToString() == "Log in" ? "nav-item active" : "nav-item")">
+        <li class="nav-item @(currentPageTitle == "Log in" ? "active" : "")">
             <a asp-area="Identity" asp-page="/Account/Login">Login</a>
         </li>
     </ul>
