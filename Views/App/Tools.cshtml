@@ -1,4 +1,4 @@
-@model List<ToolRentalSystem.Web.ViewModels.ToolsModel>
+@model List<ToolRentalSystem.Web.ViewModels.ToolModel>
 
 @{
     ViewBag.Title = "Tools";
@@ -9,6 +9,8 @@
 <table class="table">
     <thead>
         <tr>
+            <th>DetailID</th>
+            <th>ClassificationID</th>
             <th>Type</th>
             <th>Brand</th>
             <th>Trade Name</th>
@@ -19,9 +21,16 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>@item.DetailID</td>
+                <td>@item.ClassificationID</td>
                 <td>@item.Type</td>
                 <td>@item.Brand</td>
                 <td>@item.TradeName</td>
+                <td>
+                    <a asp-action="EditTool" asp-route-detailid="@item.DetailID">Edit</a> |
+                    <a asp-action="ToolDetails" asp-route-detailid="@item.DetailID">Details</a> |
+                    <a asp-action="DeleteTool" asp-route-detailid="@item.DetailID">Delete</a>
+                </td>
             </tr>
         }
     </tbody>

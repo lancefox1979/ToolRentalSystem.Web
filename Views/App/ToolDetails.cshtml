@@ -1,0 +1,51 @@
+@model ToolRentalSystem.Web.ViewModels.ToolModel
+
+@{
+    ViewBag.Title = "Tool Details";
+}
+
+<h2>Tool Details</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DetailID)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DetailID)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ClassificationID)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ClassificationID)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Type)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Type)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Brand)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Brand)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.TradeName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.TradeName)
+            </dd>
+        </dl>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to Tools", "Tools")
+</div>

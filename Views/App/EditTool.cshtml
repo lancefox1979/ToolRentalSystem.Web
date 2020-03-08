@@ -1,0 +1,44 @@
+@model ToolRentalSystem.Web.ViewModels.ToolModel
+
+@{
+    ViewBag.Title = "Edit Tool";
+}
+
+<h2>Edit Tool</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        <label asp-for="DetailID" class="control-label"></label>
+        <div>@Html.DisplayFor(model => model.DetailID)</div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ClassificationID" class="control-label"></label>
+        <div>@Html.DisplayFor(model => model.ClassificationID)</div>
+    </div>
+
+    <div class="form-group">
+        <select asp-for="Type" class="form-control" asp-items="ViewBag.ToolTypeDropDownList">
+            <option value="">-- Select a Tool Type --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Brand" class="control-label"></label>
+        <div>@Html.EditorFor(model => model.Brand)</div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TradeName" class="control-label"></label>
+        <div>@Html.EditorFor(model => model.TradeName)</div>
+    </div>
+    
+    <div class="form-group">
+        <input type="submit" value="Save Changes" class="btn btn-default" />
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to Tools", "Tools")
+</div>
