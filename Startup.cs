@@ -70,6 +70,7 @@ namespace ToolRentalSystem.Web
             app.UseMvc(config =>
             {
                 config.MapRoute("Default", "{controller}/{action}/{id?}", new { controller = "App", Action = "Index" });
+                config.MapRoute("EditTool", "{controller}/{action}/{detailid}", new { controller = "App", Action = "EditTool" });
             });
         }
     }
