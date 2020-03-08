@@ -35,8 +35,8 @@ namespace ToolRentalSystem.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<ToolRentalSystemDBContext>(options => options.UseMySQL(Configuration.GetConnectionString("ToolRentalSystemDB")));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(Configuration.GetConnectionString("ToolRentalSystemDB")));
+            services.AddDbContext<ToolRentalSystemDBContext>(options => options.UseMySql(Configuration.GetConnectionString("ToolRentalSystemDB")));
             services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().AddJsonOptions(options =>
