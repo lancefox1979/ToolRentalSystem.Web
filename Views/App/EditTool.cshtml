@@ -1,4 +1,4 @@
-@model ToolRentalSystem.Web.ViewModels.ToolModel
+@model ToolRentalSystem.Web.Models.Database.Tool
 
 @{
     ViewBag.Title = "Edit Tool";
@@ -9,29 +9,34 @@
 @using (Html.BeginForm())
 {
     <div class="form-group">
-        <label asp-for="DetailID" class="control-label"></label>
-        <div>@Html.DisplayFor(model => model.DetailID)</div>
+        <label asp-for="ToolId" class="control-label"></label>
+        <div>@Html.DisplayFor(model => model.ToolId)</div>
     </div>
 
     <div class="form-group">
-        <label asp-for="ClassificationID" class="control-label"></label>
-        <div>@Html.DisplayFor(model => model.ClassificationID)</div>
+        <label asp-for="ToolClassification" class="control-label"></label>
+        <div>@Html.DisplayFor(model => model.ToolClassification)</div>
     </div>
 
-    <div class="form-group">
-        <select asp-for="Type" class="form-control" asp-items="ViewBag.ToolTypeDropDownList">
+    @* <div class="form-group">
+        <select asp-for="ClassificationID" class="form-control" asp-items="ViewBag.ToolTypeDropDownList">
             <option value="">-- Select a Tool Type --</option>
         </select>
-    </div>
+    </div> *@
 
     <div class="form-group">
-        <label asp-for="Brand" class="control-label"></label>
-        <div>@Html.EditorFor(model => model.Brand)</div>
+        <label asp-for="ToolBrand" class="control-label"></label>
+        <div>@Html.EditorFor(model => model.ToolBrand)</div>
     </div>
 
     <div class="form-group">
         <label asp-for="TradeName" class="control-label"></label>
         <div>@Html.EditorFor(model => model.TradeName)</div>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="ToolCondition" class="control-label"></label>
+        <div>@Html.EditorFor(model => model.ToolCondition)</div>
     </div>
     
     <div class="form-group">

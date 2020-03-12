@@ -1,4 +1,4 @@
-@model ToolRentalSystem.Web.ViewModels.ToolModel
+@model ToolRentalSystem.Web.Models.Database.Tool
 
 @{
     ViewBag.Title = "Tool Details";
@@ -13,34 +13,34 @@
         <hr />
         <dl class="row">
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.DetailID)
+                @Html.DisplayNameFor(model => model.ToolId)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.DetailID)
+                @Html.DisplayFor(model => model.ToolId)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ClassificationID)
+                @Html.DisplayNameFor(model => model.ToolClassification)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.ClassificationID)
+                @Html.DisplayFor(model => model.ToolClassification)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Type)
+                @Html.DisplayNameFor(model => model.ToolBrand)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Type)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Brand)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Brand)
+                @Html.DisplayFor(model => model.ToolBrand)
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.TradeName)
             </dt>
             <dd>
                 @Html.DisplayFor(model => model.TradeName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ToolCondition)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ToolCondition)
             </dd>
         </dl>
     </div>
