@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ToolRentalSystem.Web.Data;
 
-namespace ToolRentalSystem.Web.Data.Migrations
+namespace ToolRentalSystem.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200224192202_IdentityCreate")]
+    [Migration("20200312004401_IdentityCreate")]
     partial class IdentityCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
