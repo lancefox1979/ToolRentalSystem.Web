@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ToolRentalSystem.Web.Models.Database
 {
-    public partial class Rented
+    public partial class Rental
     {
         public int UserId { get; set; }
         public int ToolId { get; set; }

@@ -7,15 +7,15 @@ namespace ToolRentalSystem.Web.Models.Database
     {
         public Tool()
         {
-            Rented = new HashSet<Rented>();
+            Rental = new HashSet<Rental>();
         }
 
         public int ToolId { get; set; }
-        public int? ToolDetailId { get; set; }
-        public int? ToolConditionId { get; set; }
+        public string ToolClassification { get; set; }
+        public string ToolBrand { get; set; }
+        public string TradeName { get; set; }
+        public string ToolCondition { get; set; }
 
-        public ToolCondition ToolCondition { get; set; }
-        public ToolDetail ToolDetail { get; set; }
-        public ICollection<Rented> Rented { get; set; }
+        public ICollection<Rental> Rental { get; set; }
     }
 }
