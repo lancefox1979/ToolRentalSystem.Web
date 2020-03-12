@@ -40,9 +40,7 @@ namespace ToolRentalSystem.Web.Controllers
 
             return View(tool);
         }
-        
-        //[ActionName("EditTool")]
-        //[ValidateAntiForgeryToken]
+
         public async Task<IActionResult> EditTool(int? toolId)
         {
             if (toolId == null)
@@ -50,7 +48,7 @@ namespace ToolRentalSystem.Web.Controllers
                 return NotFound();
             }
             
-            var tool = await GetTool(toolId);
+            Tool tool = await GetTool(toolId);
 
             if (tool == null)
             {
@@ -58,6 +56,41 @@ namespace ToolRentalSystem.Web.Controllers
             }
 
             return View(tool);
+        }
+
+        [HttpPost, ActionName("EditTool")]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditToolPost(int? toolId)
+        {
+            if (toolId == null)
+            {
+                return NotFound();
+            }
+            
+            Tool toolToUpdate = await GetTool(toolId);
+
+            if (await TryUpdateModelAsync<Tool>(
+                toolToUpdate,
+                "",
+                t => t.ToolBrand, t => t.TradeName, t => t.ToolCondition))
+            {
+                try
+                {
+                    _context.Entry(toolToUpdate).State = EntityState.Modified;
+
+                    await _context.SaveChangesAsync();
+                }
+
+                catch (DbUpdateException ex)
+                {
+                    // ex.ToString();
+                    ModelState.AddModelError("", "Cannot update Tool: " + ex.ToString());
+                }
+
+                return RedirectToAction(nameof(EditTool), new { toolId = toolToUpdate.ToolId });
+            }
+
+            return View(toolToUpdate);
         }
 
         // Private helper method to return a Tool.
