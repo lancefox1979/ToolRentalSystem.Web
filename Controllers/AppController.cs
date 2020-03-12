@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ToolRentalSystem.Web.Models;
 using ToolRentalSystem.Web.Models.Database;
-using ToolRentalSystem.Web.ViewModels;
 
 namespace ToolRentalSystem.Web.Controllers
 {
@@ -16,124 +12,62 @@ namespace ToolRentalSystem.Web.Controllers
     {
         private readonly ToolRentalSystemDBContext _context;
 
-        private ToolModel toolsModel;
-
         public AppController(ToolRentalSystemDBContext context)
         {
             _context = context;
-            toolsModel = new ToolModel();
         }
-        
-        public IActionResult Tools()
-        {
-            List<ToolModel> toolsList = new List<ToolModel>();
 
-            var query = _context.ToolDetail.Join(
-                _context.ToolClassification,
-                toolDetail => toolDetail.ToolClassificationId,
-                toolClass => toolClass.ToolClassificationId,
-                (toolDetail, toolClass) => new
-                {
-                    DetailID = toolDetail.ToolDetailId,
-                    ClassificationID = toolClass.ToolClassificationId,
-                    Type = toolClass.ToolClassification1,
-                    Brand = toolDetail.ToolBrand,
-                    TradeName = toolDetail.TradeName
-                });
+        public async Task<IActionResult> Tools()
+        {
+            List<Tool> list = await _context.Tool.ToListAsync();
+
+            return View(list);
+        }
+
+        public async Task<IActionResult> ToolDetails(int? toolId)
+        {
+            if (toolId == null)
+            {
+                return NotFound();
+            }
             
-            foreach (var item in query)
-            {
-                ToolModel model = new ToolModel();
+            var tool = await _context.Tool.AsNoTracking().FirstOrDefaultAsync(t => t.ToolId == toolId);
 
-                model.DetailID = item.DetailID;
-                model.ClassificationID = item.ClassificationID;
-                model.Type = item.Type;
-                model.Brand = item.Brand;
-                model.TradeName = item.TradeName;
-
-                toolsList.Add(model);
-            }
-
-            return View(toolsList);
-        }
-        public async Task<IActionResult> ToolDetails(int? detailId)
-        {
-            ToolModel toolModel;
-
-            if (detailId == null)
+            if (tool == null)
             {
                 return NotFound();
             }
 
-            toolModel = await GetToolModel(detailId);
-
-            if (toolModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(toolModel);
+            return View(tool);
         }
         
         //[ActionName("EditTool")]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditTool(int? detailId)
+        public async Task<IActionResult> EditTool(int? toolId)
         {
-            ToolModel toolModel;
-            List<string> toolTypeList = new List<string>();
+            if (toolId == null)
+            {
+                return NotFound();
+            }
+            
+            var tool = await GetTool(toolId);
 
-            if (detailId == null)
+            if (tool == null)
             {
                 return NotFound();
             }
 
-            toolModel = await GetToolModel(detailId);
-
-            if (toolModel == null)
-            {
-                return NotFound();
-            }
-
-            var toolTypes = _context.ToolClassification.ToList();
-
-            foreach (ToolClassification item in toolTypes)
-            {
-                string type = item.ToolClassification1;
-
-                toolTypeList.Add(type);
-            }
-
-            PopulateToolTypeDropDownList(detailId);
-
-            return View(toolModel);
+            return View(tool);
         }
 
-        // Private helper method to return a ToolModel.
-        private async Task<ToolModel> GetToolModel(int? detailId)
+        // Private helper method to return a Tool.
+        private async Task<Tool> GetTool(int? toolId)
         {
-            ToolModel toolModel = new ToolModel();
-
-            var toolDetailQuery = await _context.ToolDetail
-                .Include(td => td.ToolClassification)
+            var tool = await _context.Tool
                 .AsNoTracking()
-                .FirstOrDefaultAsync(td => td.ToolDetailId == detailId);
+                .FirstOrDefaultAsync(t => t.ToolId == toolId);
             
-            toolModel.DetailID = toolDetailQuery.ToolDetailId;
-            toolModel.ClassificationID = toolDetailQuery.ToolClassificationId;
-            toolModel.Type = toolDetailQuery.ToolClassification.ToolClassification1;
-            toolModel.TradeName = toolDetailQuery.TradeName;
-            toolModel.Brand = toolDetailQuery.ToolBrand;
-
-            return toolModel;
-        }
-
-        private void PopulateToolTypeDropDownList(object selectedTool = null)
-        {
-            var query = from t in _context.ToolClassification
-                        orderby t.ToolClassification1
-                        select t;
-            
-            ViewBag.ToolTypeDropDownList = new SelectList(query.AsNoTracking(), "ToolClassificationId", "ToolClassification1", selectedTool);
+            return tool;
         }
 
         public IActionResult Index()
