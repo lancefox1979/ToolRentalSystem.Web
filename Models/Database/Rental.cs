@@ -12,6 +12,5 @@ namespace ToolRentalSystem.Web.Models.Database
         public int? RentalStatus { get; set; }
 
         public Tool Tool { get; set; }
-        public User User { get; set; }
     }
 }

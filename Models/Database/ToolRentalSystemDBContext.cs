@@ -25,7 +25,8 @@ namespace ToolRentalSystem.Web.Models.Database
         public virtual DbSet<EfmigrationsHistory> EfmigrationsHistory { get; set; }
         public virtual DbSet<Rental> Rental { get; set; }
         public virtual DbSet<Tool> Tool { get; set; }
-        public virtual DbSet<User> User { get; set; }
+
+        // Unable to generate entity type for table 'user'. Please see the warning messages.
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -236,12 +237,6 @@ namespace ToolRentalSystem.Web.Models.Database
                     .HasForeignKey(d => d.ToolId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("rental_ibfk_2");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Rental)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("rental_ibfk_1");
             });
 
             modelBuilder.Entity<Tool>(entity =>
@@ -270,18 +265,6 @@ namespace ToolRentalSystem.Web.Models.Database
                 entity.Property(e => e.TradeName)
                     .HasColumnName("trade_name")
                     .HasColumnType("varchar(50)");
-            });
-
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.ToTable("user");
-
-                entity.HasIndex(e => e.UserId)
-                    .HasName("IDX_user_id");
-
-                entity.Property(e => e.UserId)
-                    .HasColumnName("user_id")
-                    .HasColumnType("int(11)");
             });
         }
     }

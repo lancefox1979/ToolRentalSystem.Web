@@ -93,6 +93,22 @@ namespace ToolRentalSystem.Web.Controllers
             return View(toolToUpdate);
         }
 
+        public IActionResult AddTool()
+        {
+            return View();
+
+        }
+         
+        [HttpPost, ActionName("AddTool")]
+        //[ValidateAntiForgeryToken]
+        public IActionResult AddToolPost(Tool newTool)
+        {
+            _context.Tool.Add(newTool);
+            _context.SaveChanges();
+            ViewBag.Message = "New tool successfully added to the inventory!";
+            return View(newTool);
+        }
+
         // Private helper method to return a Tool.
         private async Task<Tool> GetTool(int? toolId)
         {

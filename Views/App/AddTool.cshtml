@@ -1,3 +1,59 @@
+@model ToolRentalSystem.Web.Models.Database.Tool
+
 @{
-    ViewBag.Title = "Add Tool";
+    ViewBag.Title = "Add Tools";
 }
+
+<h2>Add a Tool</h2>
+
+@using (Html.BeginForm())
+{
+    /*<div class="form-group">
+        <label asp-for="ToolId" class="control-label"></label>
+        <div>@Html.DisplayFor(model => model.ToolId)</div>
+    </div>*/
+
+    <div class="form-group">
+        <label asp-for="ToolId" class="control-label"></label><br />
+        <input asp-for="ToolId" class="form-control" />
+        @*<div>@Html.DisplayFor(model => model.ToolId)</div>*@
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ToolClassification" class="control-label"></label><br />
+        <input asp-for="ToolClassification" class="form-control" />
+        @*<div>@Html.EditorFor(model => model.ToolClassification)</div>*@
+    </div>
+
+    @* <div class="form-group">
+        <select asp-for="ClassificationID" class="form-control" asp-items="ViewBag.ToolTypeDropDownList">
+            <option value="">-- Select a Tool Type --</option>
+        </select>
+    </div> *@
+
+    <div class="form-group">
+        <label asp-for="ToolBrand" class="control-label"></label><br />
+        <input asp-for="ToolBrand" class="form-control" />
+        @*<div>@Html.EditorFor(model => model.ToolBrand)</div>*@
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TradeName" class="control-label"></label><br />
+        <input asp-for="TradeName" class="form-control" />
+        @*<div>@Html.EditorFor(model => model.TradeName)</div>*@
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="ToolCondition" class="control-label"></label><br />
+        <input asp-for="ToolCondition" class="form-control" />
+        @*<div>@Html.EditorFor(model => model.ToolCondition)</div>*@
+    </div>
+    
+    <div class="form-group">
+        <input type="submit" value="Add Tool" class="btn btn-default" />
+    </div>
+}
+
+<div>
+    <a asp-action="Tools">Back to Tools</a>
+</div>
