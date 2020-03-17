@@ -1,0 +1,6 @@
+Install the Microsoft.VisualStudio.Web.CodeGeneration.Design 2.1.10 NuGet package (should already be included in latest .csproj file).
+
+Run these commands in the web application's root directory:
+
+dotnet tool install --global dotnet-aspnet-codegenerator --version 2.1.1
+dotnet aspnet-codegenerator identity --files="Account.AccessDenied;Account.ConfirmEmail;Account.ExternalLogin;Account.ForgotPassword;Account.ForgotPasswordConfirmation;Account.Lockout;Account.Login;Account.LoginWith2fa;Account.LoginWithRecoveryCode;Account.Logout;Account.Manage._Layout;Account.Manage._ManageNav;Account.Manage._StatusMessage;Account.Manage.ChangePassword;Account.Manage.DeletePersonalData;Account.Manage.Disable2fa;Account.Manage.DownloadPersonalData;Account.Manage.EnableAuthenticator;Account.Manage.ExternalLogins;Account.Manage.GenerateRecoveryCodes;Account.Manage.Index;Account.Manage.PersonalData;Account.Manage.ResetAuthenticator;Account.Manage.SetPassword;Account.Manage.TwoFactorAuthentication;Account.Register;Account.ResetPassword;Account.ResetPasswordConfirmation;"
