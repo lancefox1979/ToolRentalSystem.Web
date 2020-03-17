@@ -28,6 +28,8 @@ namespace ToolRentalSystem.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = Configuration.GetConnectionString("ToolRentalSystemDB");
+            
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -35,8 +37,8 @@ namespace ToolRentalSystem.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             
-            services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(Configuration.GetConnectionString("ToolRentalSystemDB")));
-            services.AddDbContext<ToolRentalSystemDBContext>(options => options.UseMySql(Configuration.GetConnectionString("ToolRentalSystemDB")));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(connectionString));
+            services.AddDbContext<ToolRentalSystemDBContext>(options => options.UseMySql(connectionString));
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
