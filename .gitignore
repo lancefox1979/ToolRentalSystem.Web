@@ -9,6 +9,10 @@
 *.dll.config
 *.cache
 *.suo
+appsettings.Development.json
+appsettings.Production.json
+ToolRentalSystemDBContext.cs
+Scaffold Refresh.txt
 # Include dlls if they’re in the NuGet packages directory
 !/packages/*/lib/*.dll
 !/packages/*/lib/*/*.dll
