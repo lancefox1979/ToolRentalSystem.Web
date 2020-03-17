@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToolRentalSystem.Web.Models;
@@ -40,7 +41,8 @@ namespace ToolRentalSystem.Web.Controllers
 
             return View(tool);
         }
-
+        
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> EditTool(int? toolId)
         {
             if (toolId == null)
@@ -58,6 +60,7 @@ namespace ToolRentalSystem.Web.Controllers
             return View(tool);
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPost, ActionName("EditTool")]
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> EditToolPost(int? toolId)
@@ -92,13 +95,14 @@ namespace ToolRentalSystem.Web.Controllers
 
             return View(toolToUpdate);
         }
-
+        
+        [Authorize(Roles = "Admin, Manager")]
         public IActionResult AddTool()
         {
             return View();
-
         }
-         
+
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPost, ActionName("AddTool")]
         //[ValidateAntiForgeryToken]
         public IActionResult AddToolPost(Tool newTool)
