@@ -4,6 +4,10 @@
     if (ViewData["Title"] != null) { // this prevents errors if ViewData not set
         currentPageTitle = ViewData["Title"].ToString();
     }
+    // if ViewData["Title"] not used, try using ViewBag.Title
+    if (currentPageTitle == "" && ViewBag.Title != null) { // this prevents errors if ViewBag not set
+        currentPageTitle = ViewBag.Title.ToString();
+    }
 }
 
 @using Microsoft.AspNetCore.Identity
