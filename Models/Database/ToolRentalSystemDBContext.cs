@@ -9,7 +9,7 @@ namespace ToolRentalSystem.Web.Models.Database
     {
         public static string ConnectionString { get; set; }
         public IConfiguration Configuration { get; set; }
-
+        
         public ToolRentalSystemDBContext()
         {
         }
@@ -30,7 +30,7 @@ namespace ToolRentalSystem.Web.Models.Database
         public virtual DbSet<Rental> Rental { get; set; }
         public virtual DbSet<Tool> Tool { get; set; }
         public virtual DbSet<User> User { get; set; }
-        
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             ConnectionString = Configuration.GetConnectionString("ToolRentalSystemDB");
@@ -102,9 +102,9 @@ namespace ToolRentalSystem.Web.Models.Database
 
                 entity.HasIndex(e => e.UserId);
 
-                entity.Property(e => e.LoginProvider).HasColumnType("varchar(128)");
+                entity.Property(e => e.LoginProvider).HasColumnType("varchar(255)");
 
-                entity.Property(e => e.ProviderKey).HasColumnType("varchar(128)");
+                entity.Property(e => e.ProviderKey).HasColumnType("varchar(255)");
 
                 entity.Property(e => e.ProviderDisplayName).HasColumnType("longtext");
 
@@ -180,9 +180,9 @@ namespace ToolRentalSystem.Web.Models.Database
 
                 entity.Property(e => e.UserId).HasColumnType("varchar(255)");
 
-                entity.Property(e => e.LoginProvider).HasColumnType("varchar(128)");
+                entity.Property(e => e.LoginProvider).HasColumnType("varchar(255)");
 
-                entity.Property(e => e.Name).HasColumnType("varchar(128)");
+                entity.Property(e => e.Name).HasColumnType("varchar(255)");
 
                 entity.Property(e => e.Value).HasColumnType("longtext");
 
@@ -206,22 +206,19 @@ namespace ToolRentalSystem.Web.Models.Database
 
             modelBuilder.Entity<Rental>(entity =>
             {
-                entity.HasKey(e => new { e.UserId, e.ToolId });
-
                 entity.ToTable("rental");
+
+                entity.HasIndex(e => e.RentalId)
+                    .HasName("IDX_rental");
 
                 entity.HasIndex(e => e.ToolId)
                     .HasName("tool_id");
 
-                entity.HasIndex(e => new { e.UserId, e.ToolId })
-                    .HasName("IDX_rental");
+                entity.HasIndex(e => e.UserId)
+                    .HasName("user_id");
 
-                entity.Property(e => e.UserId)
-                    .HasColumnName("user_id")
-                    .HasColumnType("int(11)");
-
-                entity.Property(e => e.ToolId)
-                    .HasColumnName("tool_id")
+                entity.Property(e => e.RentalId)
+                    .HasColumnName("rental_id")
                     .HasColumnType("int(11)");
 
                 entity.Property(e => e.DueDate)
@@ -230,22 +227,28 @@ namespace ToolRentalSystem.Web.Models.Database
 
                 entity.Property(e => e.RentalStatus)
                     .HasColumnName("rental_status")
-                    .HasColumnType("int(11)");
+                    .HasColumnType("varchar(50)");
 
                 entity.Property(e => e.StartDate)
                     .HasColumnName("start_date")
                     .HasColumnType("date");
 
+                entity.Property(e => e.ToolId)
+                    .HasColumnName("tool_id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnName("user_id")
+                    .HasColumnType("int(11)");
+
                 entity.HasOne(d => d.Tool)
                     .WithMany(p => p.Rental)
                     .HasForeignKey(d => d.ToolId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("rental_ibfk_2");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Rental)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("rental_ibfk_1");
             });
 
@@ -270,6 +273,10 @@ namespace ToolRentalSystem.Web.Models.Database
 
                 entity.Property(e => e.ToolCondition)
                     .HasColumnName("tool_condition")
+                    .HasColumnType("varchar(50)");
+
+                entity.Property(e => e.ToolStatus)
+                    .HasColumnName("tool_status")
                     .HasColumnType("varchar(50)");
 
                 entity.Property(e => e.TradeName)
