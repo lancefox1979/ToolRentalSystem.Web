@@ -28,7 +28,11 @@ namespace ToolRentalSystem.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = Configuration.GetConnectionString("ToolRentalSystemDB");
+            // Use this for remote DB:
+            string connectionString = Configuration.GetConnectionString("ToolRentalSystemDB_Remote");
+
+            // Use this for local testing:
+            //string connectionString = Configuration.GetConnectionString("ToolRentalSystemDB");
             
             services.Configure<CookiePolicyOptions>(options =>
             {

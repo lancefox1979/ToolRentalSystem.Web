@@ -33,7 +33,7 @@ namespace ToolRentalSystem.Web.Models.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            ConnectionString = Configuration.GetConnectionString("ToolRentalSystemDB");
+            ConnectionString = Configuration.GetConnectionString("ToolRentalSystemDB_Remote");
 
             if (!optionsBuilder.IsConfigured)
             {
