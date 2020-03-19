@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,8 +21,13 @@ namespace ToolRentalSystem.Web.Controllers
 
         public async Task<IActionResult> Tools()
         {
-            List<Tool> list = await _context.Tool.ToListAsync();
+            //List<Tool> list = await _context.Tool.ToListAsync();
 
+            List<Tool> list = await _context.Tool
+                .Where(t => t.ToolStatus.Equals("active"))
+                .AsNoTracking()
+                .ToListAsync();
+            
             return View(list);
         }
 
@@ -32,7 +38,9 @@ namespace ToolRentalSystem.Web.Controllers
                 return NotFound();
             }
             
-            var tool = await _context.Tool.AsNoTracking().FirstOrDefaultAsync(t => t.ToolId == toolId);
+            var tool = await _context.Tool
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.ToolId == toolId);
 
             if (tool == null)
             {
