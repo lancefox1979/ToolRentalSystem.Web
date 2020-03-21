@@ -141,6 +141,18 @@ namespace ToolRentalSystem.Web.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Rentals()
+        {
+            //List<Rental> list = await _context.Rental.ToListAsync();
+
+            List<Rental> list = await _context.Rental
+                .Where(t => t.RentalStatus.Equals("rented"))
+                .AsNoTracking()
+                .ToListAsync();
+            
+            return View(list);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
