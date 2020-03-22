@@ -13,11 +13,11 @@
         <div>@Html.DisplayFor(model => model.ToolId)</div>
     </div>*/
 
-    <div class="form-group">
+    @*<div class="form-group">
         <label asp-for="ToolId" class="control-label"></label><br />
         <input asp-for="ToolId" class="form-control" />
-        @*<div>@Html.DisplayFor(model => model.ToolId)</div>*@
-    </div>
+        @*<div>@Html.DisplayFor(model => model.ToolId)</div>
+    </div>*@
 
     <div class="form-group">
         <label asp-for="ToolClassification" class="control-label"></label><br />
@@ -48,6 +48,19 @@
         <input asp-for="ToolCondition" class="form-control" />
         @*<div>@Html.EditorFor(model => model.ToolCondition)</div>*@
     </div>
+
+   @* <div class="form-group">
+        <label asp-for="ToolStatus" class="control-label"></label><br />
+        <input asp-for="ToolStatus" class="form-control" />
+        @*<div>@Html.EditorFor(model => model.ToolCondition)</div>
+    </div>*@
+
+
+   @* <div class="form-group">
+        <label asp-for="ToolStatus" class="control-label"></label><br />
+        <input asp-for="ToolStatus" class="form-control" defaultValue= "active" />
+        @*<div>@Html.EditorFor(model => model.ToolCondition)</div>
+    </div>*@
     
     <div class="form-group">
         <input type="submit" value="Add Tool" class="btn btn-default" />

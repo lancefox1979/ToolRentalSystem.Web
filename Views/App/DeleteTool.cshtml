@@ -1,0 +1,34 @@
+@model ToolRentalSystem.Web.Models.Database.Tool
+
+@{
+    ViewBag.Title = "Delete Tools";
+}
+
+<h2>Delete Tool</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        <label asp-for="ToolId" class="control-label"></label>
+        <div>@Html.DisplayFor(model => model.ToolId)</div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ToolClassification" class="control-label"></label>
+        <div>@Html.DisplayFor(model => model.ToolClassification)</div>
+    </div>
+
+    <div> <font color="red">Change the tool's status to "inactive" to delete it from customer view</font></div>
+    <div class="form-group">
+        <label asp-for="ToolStatus" class="control-label"></label>
+        <div>@Html.EditorFor(model => model.ToolStatus)</div>
+    </div>
+
+     <div class="form-group">
+        <input type="submit" value="Save Changes" class="btn btn-default" />
+    </div>
+
+}
+<div>
+    <a asp-action="Tools">Back to Tools</a>
+</div>

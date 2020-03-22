@@ -121,6 +121,59 @@ namespace ToolRentalSystem.Web.Controllers
             return View(newTool);
         }
 
+
+                public async Task<IActionResult> DeleteTool(int? toolID)
+        {
+            if (toolID == null)
+            {
+                return NotFound();
+            }
+
+            Tool tool = await GetTool(toolID);
+            
+            
+            if (tool == null)
+            {
+                return NotFound();
+            }
+
+            return View(tool);
+        }
+
+        [HttpPost, ActionName("DeleteTool")]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteToollPost(int? toolID)
+        {
+            if (toolID == null)
+            {
+                return NotFound();
+            }
+
+            Tool toolToDelete = await GetTool(toolID);
+            
+            if (await TryUpdateModelAsync<Tool>(
+                toolToDelete,
+                "",
+                t => t.ToolStatus))
+            {
+                try
+                {
+                    _context.Entry(toolToDelete).State = EntityState.Modified;
+
+                    await _context.SaveChangesAsync();
+                }
+
+                catch (DbUpdateException ex)
+                {
+                    // ex.ToString();
+                    ModelState.AddModelError("", "Cannot update Tool: " + ex.ToString());
+                }
+
+                return RedirectToAction(nameof(DeleteTool), new { toolId = toolToDelete.ToolId });
+            }
+            return View(toolToDelete);
+        }
+
         // Private helper method to return a Tool.
         private async Task<Tool> GetTool(int? toolId)
         {
