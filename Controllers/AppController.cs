@@ -206,6 +206,70 @@ namespace ToolRentalSystem.Web.Controllers
             return View(list);
         }
 
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<IActionResult> ReturnTool(int? rentalId)
+        {
+            if (rentalId == null)
+            {
+                return NotFound();
+            }
+            
+            Rental rental = await GetRental(rentalId);
+
+            if (rental == null)
+            {
+                return NotFound();
+            }
+
+            return View(rental);
+        }
+
+        [Authorize(Roles = "Admin, Manager")]
+        [HttpPost, ActionName("ReturnTool")]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReturnToolPost(int? rentalId)
+        {
+            if (rentalId == null)
+            {
+                return NotFound();
+            }
+            
+            Rental rentalToUpdate = await GetRental(rentalId);
+
+            if (await TryUpdateModelAsync<Rental>(
+                rentalToUpdate,
+                "",
+                t => t.RentalStatus))
+            {
+                try
+                {
+                    _context.Entry(rentalToUpdate).State = EntityState.Modified;
+
+                    await _context.SaveChangesAsync();
+                }
+
+                catch (DbUpdateException ex)
+                {
+                    // ex.ToString();
+                    ModelState.AddModelError("", "Cannot update Rental: " + ex.ToString());
+                }
+
+                return RedirectToAction(nameof(ReturnTool), new { rentalId = rentalToUpdate.RentalId });
+            }
+
+            return View(rentalToUpdate);
+        }
+
+        // Private helper method to return a Rental.
+        private async Task<Rental> GetRental(int? rentalId)
+        {
+            var rental = await _context.Rental
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.RentalId == rentalId);
+            
+            return rental;
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

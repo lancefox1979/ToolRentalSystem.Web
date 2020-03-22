@@ -47,7 +47,7 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
                 <td>@dueDate.Value.ToString("yyyy-MM-dd")</td>
                 <td>@item.RentalStatus</td>
                 <td>
-                    <a asp-action="ReturnTool" asp-route-toolid="@item.RentalId">Return Tool</a>
+                    <a asp-action="ReturnTool" asp-route-rentalid="@item.RentalId">Return Tool</a>
                 </td>
             </tr>
         }

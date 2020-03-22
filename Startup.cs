@@ -91,6 +91,7 @@ namespace ToolRentalSystem.Web
                 config.MapRoute("EditTool", "{controller}/{action}/{detailid}", new { controller = "App", Action = "EditTool" });
                 config.MapRoute("AddTool", "{controller}/{action}/{toolid}", new { controller = "App", Action = "AddTool" });
                 config.MapRoute("DeleteTool", "{controller}/{action}/{toolid}", new { controller = "App", Action = "DeleteTool" });
+                config.MapRoute("ReturnTool", "{controller}/{action}/{rentalid}", new { controller = "App", Action = "ReturnTool" });
             });
 
             //ManageRoles(app.ApplicationServices).GetAwaiter().GetResult();
