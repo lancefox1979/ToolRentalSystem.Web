@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@{
     // set page title variable
     var currentPageTitle = "";
     if (ViewData["Title"] != null) { // this prevents errors if ViewData not set
@@ -8,6 +11,8 @@
     if (currentPageTitle == "" && ViewBag.Title != null) { // this prevents errors if ViewBag not set
         currentPageTitle = ViewBag.Title.ToString();
     }
+
+    var isAuthorized = (await AuthorizationService.AuthorizeAsync(User, "ElevatedRights")).Succeeded;
 }
 
 <!DOCTYPE html>
@@ -49,9 +54,12 @@
                     <li class="nav-item @(currentPageTitle == "Tools" ? "active" : "")">
                         <a asp-area="" asp-controller="App" asp-action="Tools">Tools</a>
                     </li>
-                    <li class="nav-item @(currentPageTitle == "Rentals" ? "active" : "")">
-                        <a asp-area="" asp-controller="App" asp-action="Rentals">Rentals</a>
-                    </li>
+                    @if (isAuthorized)
+                    {
+                        <li class="nav-item @(currentPageTitle == "Rentals" ? "active" : "")">
+                            <a asp-area="" asp-controller="App" asp-action="Rentals">Rentals</a>
+                        </li>
+                    }
                 </ul>
                 <partial name="_LoginPartial" />
             </div>

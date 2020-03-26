@@ -53,6 +53,13 @@ namespace ToolRentalSystem.Web
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            
+            // Parts of this setup borrowed from the following:
+            // https://www.red-gate.com/simple-talk/dotnet/c-programming/policy-based-authorization-in-asp-net-core-a-deep-dive/
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ElevatedRights", policy => policy.RequireRole(new string[] { "Admin", "Manager" }));
+            });
 
             services.Configure<IdentityOptions>(options =>
             {

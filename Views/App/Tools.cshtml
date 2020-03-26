@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 @model IEnumerable<ToolRentalSystem.Web.Models.Database.Tool>
 
 <!-- 
@@ -14,10 +16,19 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
 
 @{
     ViewBag.Title = "Tools";
+
+    var isAuthorized = (await AuthorizationService.AuthorizeAsync(User, "ElevatedRights")).Succeeded;
 }
 
 <h3>Tools</h3>
-<div><a asp-action="AddTool">Add a Tool</a></div>
+
+@if (isAuthorized)
+{
+    <div>
+        <a asp-action="AddTool">Add a Tool</a>
+    </div>
+}
+
 <br />
 
 <table id="tools_table" class="table table-striped table-bordered dt-responsive nowrap">
@@ -28,7 +39,10 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
             <th>Brand</th>
             <th>Name</th>
             <th>Condition</th>
-            <th></th>
+            @if (isAuthorized)
+            {
+                <th></th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -40,11 +54,14 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
                 <td>@item.ToolBrand</td>
                 <td>@item.TradeName</td>
                 <td>@item.ToolCondition</td>
-                <td>
-                    <a asp-action="EditTool" asp-route-toolid="@item.ToolId">Edit</a> |
-                    <a asp-action="ToolDetails" asp-route-toolid="@item.ToolId">Details</a> |
-                    <a asp-action="DeleteTool" asp-route-toolid="@item.ToolId">Delete</a>
-                </td>
+                @if (isAuthorized)
+                {
+                    <td>
+                        <a asp-action="EditTool" asp-route-toolid="@item.ToolId">Edit</a> |
+                        <a asp-action="ToolDetails" asp-route-toolid="@item.ToolId">Details</a> |
+                        <a asp-action="DeleteTool" asp-route-toolid="@item.ToolId">Delete</a>
+                    </td>
+                }
             </tr>
         }
     </tbody>
