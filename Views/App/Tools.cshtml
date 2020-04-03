@@ -41,6 +41,7 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
             <th>Condition</th>
             @if (isAuthorized)
             {
+                <th>Status</th>
                 <th></th>
             }
         </tr>
@@ -56,6 +57,7 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
                 <td>@item.ToolCondition</td>
                 @if (isAuthorized)
                 {
+                    <td>@item.ToolStatus</td>
                     <td>
                         <a asp-action="EditTool" asp-route-toolid="@item.ToolId">Edit</a> |
                         <a asp-action="ToolDetails" asp-route-toolid="@item.ToolId">Details</a> |

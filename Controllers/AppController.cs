@@ -24,7 +24,7 @@ namespace ToolRentalSystem.Web.Controllers
             //List<Tool> list = await _context.Tool.ToListAsync();
 
             List<Tool> list = await _context.Tool
-                .Where(t => t.ToolStatus.Equals("active"))
+                //.Where(t => t.ToolStatus.Equals("active"))
                 .AsNoTracking()
                 .ToListAsync();
             
