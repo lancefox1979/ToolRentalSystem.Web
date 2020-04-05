@@ -1,22 +1,18 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 namespace ToolRentalSystem.Web.Models.Database
 {
     public partial class ToolRentalSystemDBContext : DbContext
     {
-        public static string ConnectionString { get; set; }
-        public IConfiguration Configuration { get; set; }
-        
         public ToolRentalSystemDBContext()
         {
         }
 
-        public ToolRentalSystemDBContext(DbContextOptions<ToolRentalSystemDBContext> options, IConfiguration configuration) : base(options)
+        public ToolRentalSystemDBContext(DbContextOptions<ToolRentalSystemDBContext> options)
+            : base(options)
         {
-            Configuration = configuration;
         }
 
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
@@ -33,11 +29,10 @@ namespace ToolRentalSystem.Web.Models.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            ConnectionString = Configuration.GetConnectionString("ToolRentalSystemDB_Remote");
-
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql(ConnectionString);
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseMySql("server=toolrentalsystem-database.ccca3zav5gur.us-east-2.rds.amazonaws.com;port=3306;user=SA_ToolRentalSystem;password=admin;database=ToolRentalSystemDB");
             }
         }
 
@@ -277,7 +272,8 @@ namespace ToolRentalSystem.Web.Models.Database
 
                 entity.Property(e => e.ToolStatus)
                     .HasColumnName("tool_status")
-                    .HasColumnType("varchar(50)");
+                    .HasColumnType("varchar(50)")
+                    .HasDefaultValueSql("'active'");
 
                 entity.Property(e => e.TradeName)
                     .HasColumnName("trade_name")

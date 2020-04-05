@@ -118,8 +118,9 @@ namespace ToolRentalSystem.Web.Controllers
             _context.Tool.Add(newTool);
             _context.SaveChanges();
             ViewBag.Message = "New tool successfully added to the inventory!";
-            return View(newTool);
+            return View("Confirmation");
         }
+
 
 
                 public async Task<IActionResult> DeleteTool(int? toolID)

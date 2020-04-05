@@ -21,7 +21,7 @@
 
     <div class="form-group">
         <label asp-for="ToolClassification" class="control-label"></label><br />
-        <input asp-for="ToolClassification" class="form-control" />
+        <input asp-for="ToolClassification" class="form-control" required>
         @*<div>@Html.EditorFor(model => model.ToolClassification)</div>*@
     </div>
 
@@ -33,19 +33,19 @@
 
     <div class="form-group">
         <label asp-for="ToolBrand" class="control-label"></label><br />
-        <input asp-for="ToolBrand" class="form-control" />
+        <input asp-for="ToolBrand" class="form-control" required>
         @*<div>@Html.EditorFor(model => model.ToolBrand)</div>*@
     </div>
 
     <div class="form-group">
         <label asp-for="TradeName" class="control-label"></label><br />
-        <input asp-for="TradeName" class="form-control" />
+        <input asp-for="TradeName" class="form-control" required>
         @*<div>@Html.EditorFor(model => model.TradeName)</div>*@
     </div>
     
     <div class="form-group">
         <label asp-for="ToolCondition" class="control-label"></label><br />
-        <input asp-for="ToolCondition" class="form-control" />
+        <input asp-for="ToolCondition" class="form-control" required>
         @*<div>@Html.EditorFor(model => model.ToolCondition)</div>*@
     </div>
 
