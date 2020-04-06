@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ToolRentalSystem.Web.Models;
 using ToolRentalSystem.Web.Models.Database;
@@ -118,6 +119,8 @@ namespace ToolRentalSystem.Web.Controllers
             _context.Tool.Add(newTool);
             _context.SaveChanges();
             ViewBag.Message = "New tool successfully added to the inventory!";
+            ViewBag.Link = "Tools"; // location that link on confirmation screen leads to
+            ViewBag.LinkMessage = "Back to Tools"; // message shown for link on confirmation screen
             return View("Confirmation");
         }
 
@@ -205,6 +208,57 @@ namespace ToolRentalSystem.Web.Controllers
                 .ToListAsync();
             
             return View(list);
+        }
+
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<IActionResult> RentOutTool()
+        {
+            // get a list of asp net users
+            List<AspNetUsers> aspNetUserList = await _context.AspNetUsers
+                .AsNoTracking()
+                .ToListAsync();
+            
+            // fill a drop down list with the ids of asp net users in the database
+            ViewBag.AspNetUserDropDownList = new SelectList(aspNetUserList, "Id", "Id");
+
+            // get a list of users from the database
+            List<User> userList = await _context.User
+                .AsNoTracking()
+                .ToListAsync();
+            
+            // fill a drop down list with the user ids of users in the database
+            ViewBag.UserDropDownList = new SelectList(userList, "UserId", "UserId");
+
+            // get a list of the tools that are currently rented out or reserved
+            var rentals = _context.Rental
+                .Where(t => t.RentalStatus.Equals("rented") || t.RentalStatus.Equals("reserved"))
+                .Select(t => t.ToolId)
+                .ToList();
+
+            // get a list of those tools that are active and not currently rented or reserved
+            List<Tool> toolList = await _context.Tool
+                .Where(t => t.ToolStatus.Equals("active") && !(rentals.Contains(t.ToolId)))
+                .AsNoTracking()
+                .ToListAsync();
+            
+            // fill the drop down list with tools that can be rented
+            ViewBag.ToolDropDownList = new SelectList(toolList, "ToolId", "ToolId");
+
+            return View();
+        }
+
+        [Authorize(Roles = "Admin, Manager")]
+        [HttpPost, ActionName("RentOutTool")]
+        //[ValidateAntiForgeryToken]
+        public IActionResult RentOutToolPost(Rental newRental)
+        {
+            _context.Rental.Add(newRental);
+            _context.SaveChanges();
+
+            ViewBag.Message = "Tool successfully rented out to the user!";
+            ViewBag.Link = "RentOutTool";
+            ViewBag.LinkMessage = "Back to Rent Out Tool";// location that link on confirmation screen leads to
+            return View("Confirmation");// message shown for link on confirmation screen
         }
 
         [Authorize(Roles = "Admin, Manager")]

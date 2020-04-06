@@ -1,0 +1,68 @@
+@{
+
+}
+
+@model ToolRentalSystem.Web.Models.Database.Rental
+
+@{
+    ViewBag.Title = "Rent Out Tool";
+
+    DateTime startDateTime = DateTime.Now; // set start date to current date
+    TimeSpan rentalTime = new TimeSpan(14, 0, 0, 0); // two weeks
+    DateTime dueDateTime = startDateTime.Add(rentalTime); // set due date to two weeks from current date
+
+    // format dates to remove time
+    var startDate = startDateTime.ToString("yyyy-MM-dd");
+    var dueDate = dueDateTime.ToString("yyyy-MM-dd");
+}
+
+<h2>Rent Out Tool</h2>
+
+@using (Html.BeginForm())
+{
+    /* For switch to AspNetUser id
+    <div class="form-group">
+        <label asp-for="AspNetUserId" class="control-label">Asp Net User ID</label><br />
+        <select asp-for="AspNetUserId" class="form-control" asp-items="ViewBag.AspNetUserDropDownList" required>
+            <option value="">-- Select a User --</option>
+        </select>
+    </div>
+    */
+
+    // select user id
+    <div class="form-group">
+        <label asp-for="UserId" class="control-label">User ID</label><br />
+        <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserDropDownList" required>
+            <option value="">-- Select a User --</option>
+        </select>
+    </div>
+
+    // select tool id
+    <div class="form-group">
+        <label asp-for="ToolId" class="control-label">Tool ID</label><br />
+        <select asp-for="ToolId" class="form-control" asp-items="ViewBag.ToolDropDownList" required>
+            <option value="">-- Select a Tool --</option>
+        </select>
+    </div>
+
+    // start date is current date (read only)
+    <div class="form-group">
+        <label asp-for="StartDate" class="control-label">Start Date</label><br />
+        <input asp-for="StartDate" class="form-control" value="@startDate" readonly />
+    </div>
+    
+    // due date two weeks past start date (read only)
+    <div class="form-group">
+        <label asp-for="DueDate" class="control-label">Due Date</label><br />
+        <input asp-for="DueDate" class="form-control" value="@dueDate" readonly />
+    </div>
+
+    // rental status is sent to rented, this input is hidden
+    <div class="form-group">
+        <input asp-for="RentalStatus" class="form-control" value="rented" readonly type="hidden" />
+    </div>
+    
+    <div class="form-group">
+        <input type="submit" value="Rent Out Tool" class="btn btn-default" />
+    </div>
+}
