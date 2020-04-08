@@ -19,16 +19,28 @@ namespace ToolRentalSystem.Web.Controllers
         {
             _context = context;
         }
-
+        
         public async Task<IActionResult> Tools()
         {
             //List<Tool> list = await _context.Tool.ToListAsync();
 
-            List<Tool> list = await _context.Tool
-                //.Where(t => t.ToolStatus.Equals("active"))
-                .AsNoTracking()
-                .ToListAsync();
-            
+            List<Tool> list;
+
+            if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+            {
+                list = await _context.Tool
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+
+            else
+            {
+                list = await _context.Tool
+                    .Where(t => t.ToolStatus.Equals("active"))
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+
             return View(list);
         }
 
