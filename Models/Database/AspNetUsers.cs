@@ -11,6 +11,7 @@ namespace ToolRentalSystem.Web.Models.Database
             AspNetUserLogins = new HashSet<AspNetUserLogins>();
             AspNetUserRoles = new HashSet<AspNetUserRoles>();
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
+            Rental = new HashSet<Rental>();
         }
 
         public string Id { get; set; }
@@ -33,5 +34,6 @@ namespace ToolRentalSystem.Web.Models.Database
         public ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
         public ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public ICollection<Rental> Rental { get; set; }
     }
 }

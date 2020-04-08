@@ -1,22 +1,17 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 namespace ToolRentalSystem.Web.Models.Database
 {
     public partial class ToolRentalSystemDBContext : DbContext
     {
-        public static string ConnectionString { get; set; }
-        public IConfiguration Configuration { get; set; }
-        
         public ToolRentalSystemDBContext()
         {
         }
 
-        public ToolRentalSystemDBContext(DbContextOptions<ToolRentalSystemDBContext> options, IConfiguration configuration) : base(options)
+        public ToolRentalSystemDBContext(DbContextOptions<ToolRentalSystemDBContext> options) : base(options)
         {
-            Configuration = configuration;
         }
 
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
@@ -33,11 +28,10 @@ namespace ToolRentalSystem.Web.Models.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            ConnectionString = Configuration.GetConnectionString("ToolRentalSystemDB_Remote");
-
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql(ConnectionString);
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseMySql("server=toolrentalsystem-database.ccca3zav5gur.us-east-2.rds.amazonaws.com;port=3306;user=SA_ToolRentalSystem;password=admin;database=ToolRentalSystemDB");
             }
         }
 
@@ -208,6 +202,9 @@ namespace ToolRentalSystem.Web.Models.Database
             {
                 entity.ToTable("rental");
 
+                entity.HasIndex(e => e.AspNetUserId)
+                    .HasName("asp_net_user_id");
+
                 entity.HasIndex(e => e.RentalId)
                     .HasName("IDX_rental");
 
@@ -220,6 +217,10 @@ namespace ToolRentalSystem.Web.Models.Database
                 entity.Property(e => e.RentalId)
                     .HasColumnName("rental_id")
                     .HasColumnType("int(11)");
+
+                entity.Property(e => e.AspNetUserId)
+                    .HasColumnName("asp_net_user_id")
+                    .HasColumnType("varchar(255)");
 
                 entity.Property(e => e.DueDate)
                     .HasColumnName("due_date")
@@ -241,15 +242,20 @@ namespace ToolRentalSystem.Web.Models.Database
                     .HasColumnName("user_id")
                     .HasColumnType("int(11)");
 
+                entity.HasOne(d => d.AspNetUser)
+                    .WithMany(p => p.Rental)
+                    .HasForeignKey(d => d.AspNetUserId)
+                    .HasConstraintName("rental_ibfk_1");
+
                 entity.HasOne(d => d.Tool)
                     .WithMany(p => p.Rental)
                     .HasForeignKey(d => d.ToolId)
-                    .HasConstraintName("rental_ibfk_2");
+                    .HasConstraintName("rental_ibfk_3");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Rental)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("rental_ibfk_1");
+                    .HasConstraintName("rental_ibfk_2");
             });
 
             modelBuilder.Entity<Tool>(entity =>
@@ -267,18 +273,30 @@ namespace ToolRentalSystem.Web.Models.Database
                     .HasColumnName("tool_brand")
                     .HasColumnType("varchar(50)");
 
-                entity.Property(e => e.ToolClassification)
-                    .HasColumnName("tool_classification")
-                    .HasColumnType("varchar(50)");
-
                 entity.Property(e => e.ToolCondition)
                     .HasColumnName("tool_condition")
                     .HasColumnType("varchar(50)");
+
+                entity.Property(e => e.ToolLastUpdated)
+                    .HasColumnName("tool_last_updated")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.ToolPrice)
+                    .HasColumnName("tool_price")
+                    .HasColumnType("decimal(6,2)");
 
                 entity.Property(e => e.ToolStatus)
                     .HasColumnName("tool_status")
                     .HasColumnType("varchar(50)")
                     .HasDefaultValueSql("'active'");
+
+                entity.Property(e => e.ToolType)
+                    .HasColumnName("tool_type")
+                    .HasColumnType("varchar(50)");
+
+                entity.Property(e => e.ToolUpdatedBy)
+                    .HasColumnName("tool_updated_by")
+                    .HasColumnType("varchar(50)");
 
                 entity.Property(e => e.TradeName)
                     .HasColumnName("trade_name")
