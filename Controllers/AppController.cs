@@ -151,59 +151,59 @@ namespace ToolRentalSystem.Web.Controllers
             return View("Confirmation");
         }
         
-        public async Task<IActionResult> DeleteTool(int? toolID)
-        {
-            if (toolID == null)
-            {
-                return NotFound();
-            }
+        // public async Task<IActionResult> DeleteTool(int? toolID)
+        // {
+        //     if (toolID == null)
+        //     {
+        //         return NotFound();
+        //     }
 
-            Tool tool = await GetTool(toolID);
+        //     Tool tool = await GetTool(toolID);
 
-            if (tool == null)
-            {
-                return NotFound();
-            }
+        //     if (tool == null)
+        //     {
+        //         return NotFound();
+        //     }
 
-            return View(tool);
-        }
+        //     return View(tool);
+        // }
 
-        [HttpPost, ActionName("DeleteTool")]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteToolPost(int? toolID)
-        {
-            if (toolID == null)
-            {
-                return NotFound();
-            }
+        // [HttpPost, ActionName("DeleteTool")]
+        // //[ValidateAntiForgeryToken]
+        // public async Task<IActionResult> DeleteToolPost(int? toolID)
+        // {
+        //     if (toolID == null)
+        //     {
+        //         return NotFound();
+        //     }
 
-            Tool toolToDelete = await GetTool(toolID);
+        //     Tool toolToDelete = await GetTool(toolID);
             
-            if (await TryUpdateModelAsync<Tool>(
-                toolToDelete,
-                "",
-                t => t.ToolStatus))
-            {
-                try
-                {
-                    _context.Entry(toolToDelete).State = EntityState.Modified;
+        //     if (await TryUpdateModelAsync<Tool>(
+        //         toolToDelete,
+        //         "",
+        //         t => t.ToolStatus))
+        //     {
+        //         try
+        //         {
+        //             _context.Entry(toolToDelete).State = EntityState.Modified;
 
-                    await _context.SaveChangesAsync();
-                }
+        //             await _context.SaveChangesAsync();
+        //         }
 
-                catch (DbUpdateException ex)
-                {
-                    // ex.ToString();
-                    ModelState.AddModelError("", "Cannot update Tool: " + ex.ToString());
-                }
+        //         catch (DbUpdateException ex)
+        //         {
+        //             // ex.ToString();
+        //             ModelState.AddModelError("", "Cannot update Tool: " + ex.ToString());
+        //         }
 
-                return RedirectToAction(nameof(DeleteTool), new { toolId = toolToDelete.ToolId });
-            }
+        //         return RedirectToAction(nameof(DeleteTool), new { toolId = toolToDelete.ToolId });
+        //     }
 
-            return View(toolToDelete);
-        }
+        //     return View(toolToDelete);
+        // }
         
-                [HttpPost]
+        [HttpPost]
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateStatusPost(int? toolID, string statusResponse)
         {
