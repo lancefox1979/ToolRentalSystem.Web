@@ -203,6 +203,68 @@ namespace ToolRentalSystem.Web.Controllers
             return View(toolToDelete);
         }
         
+                [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateStatusPost(int? toolID, string statusResponse)
+        {
+            if (toolID == null)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Tool toolToUpdate = await GetTool(toolID);
+
+            // TODO: extract method with this functionality...?
+            string userNameFull = User.Identity.Name;
+            string userNameShort = userNameFull.Substring(0, userNameFull.IndexOf('@'));
+
+            toolToUpdate.ToolLastUpdated = DateTime.Now;
+            toolToUpdate.ToolUpdatedBy = userNameShort;
+            
+            if (await TryUpdateModelAsync<Tool>(
+                toolToUpdate,
+                "",
+                t => t.ToolStatus))
+            {
+                try
+                {
+                    _context.Entry(toolToUpdate).State = EntityState.Modified;
+
+                    if (statusResponse.ToUpper().Equals("DEACTIVATE"))
+                    {
+                        toolToUpdate.ToolStatus = "inactive";
+                    }
+
+                    else if (statusResponse.ToUpper().Equals("REACTIVATE"))
+                    {
+                        toolToUpdate.ToolStatus = "active";
+                    }
+
+                    else
+                    {
+                        return BadRequest("Invalid request: " + statusResponse);
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+
+                catch (DbUpdateException ex)
+                {
+                    // ex.ToString();
+                    ModelState.AddModelError("", "Cannot update Tool: " + ex.ToString());
+                }
+
+                return RedirectToAction(nameof(EditTool), new { toolId = toolToUpdate.ToolId });
+            }
+
+            return View();
+        }
+
         // Private helper method to return a Tool.
         private async Task<Tool> GetTool(int? toolId)
         {
