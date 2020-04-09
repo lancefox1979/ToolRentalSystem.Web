@@ -6,41 +6,67 @@
 
 <h2>Edit Tool</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(FormMethod.Post))
 {
-    <div class="form-group">
-        <label asp-for="ToolId" class="control-label"></label>
-        <div>@Html.DisplayFor(model => model.ToolId)</div>
+    <div class="input-group">
+
+        <div class="form-group">
+            <label asp-for="ToolId" class="control-label"></label>
+            <input asp-for="ToolId" class="form-control" readonly/>
+            @* <div>@Html.DisplayFor(model => model.ToolId)</div> *@
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="ToolType" class="control-label"></label>
+            <input asp-for="ToolType" class="form-control" readonly/>
+            @* <div>@Html.DisplayFor(model => model.ToolClassification)</div> *@
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ToolBrand" class="control-label"></label>
+            <input asp-for="ToolBrand" class="form-control" />
+            @* <div>@Html.EditorFor(model => model.ToolBrand)</div> *@
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TradeName" class="control-label"></label>
+            <input asp-for="TradeName" class="form-control" />
+            @* <div>@Html.EditorFor(model => model.TradeName)</div> *@
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ToolCondition" class="control-label"></label>
+            @* <div>@Html.EditorFor(model => model.ToolCondition)</div> *@
+            <div>
+                @Html.DropDownListFor(
+                    t => t.ToolCondition,
+                    new SelectList(ToolStatus.StatusList),
+                    new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ToolStatus" class="control-label"></label>
+            <input asp-for="ToolStatus" class="form-control" readonly/>
+            @* @Html.TextBoxFor(model => model.ToolStatus, new { disabled = "disabled", @readonly = true }) *@
+        </div>
+
     </div>
 
-    <div class="form-group">
-        <label asp-for="ToolType" class="control-label"></label>
-        <div>@Html.DisplayFor(model => model.ToolType)</div>
-    </div>
-
-    @* <div class="form-group">
-        <select asp-for="ClassificationID" class="form-control" asp-items="ViewBag.ToolTypeDropDownList">
-            <option value="">-- Select a Tool Type --</option>
-        </select>
-    </div> *@
+    <br />
 
     <div class="form-group">
-        <label asp-for="ToolBrand" class="control-label"></label>
-        <div>@Html.EditorFor(model => model.ToolBrand)</div>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="TradeName" class="control-label"></label>
-        <div>@Html.EditorFor(model => model.TradeName)</div>
-    </div>
-    
-    <div class="form-group">
-        <label asp-for="ToolCondition" class="control-label"></label>
-        <div>@Html.EditorFor(model => model.ToolCondition)</div>
-    </div>
-    
-    <div class="form-group">
-        <input type="submit" value="Save Changes" class="btn btn-default" />
+        <input type="submit" name="save" value="Save Changes" class="btn btn-default" />
+        <form formaction="UpdateStatusPost">
+            @if (Model.ToolStatus.Equals("active"))
+            {
+                <input type="submit" name="statusResponse" value="Deactivate" formaction=@Url.Action("UpdateStatusPost") formmethod="post" class="btn btn-danger" />
+            }
+            else
+            {
+                <input type="submit" name="statusResponse" value="Reactivate" formaction=@Url.Action("UpdateStatusPost") formmethod="post" class="btn btn-success" />
+            }
+        </form>
     </div>
 }
 
