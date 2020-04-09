@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace ToolRentalSystem.Web.Controllers
         {
             _context = context;
         }
-        
+
         public async Task<IActionResult> Tools()
         {
             //List<Tool> list = await _context.Tool.ToListAsync();
@@ -93,6 +94,13 @@ namespace ToolRentalSystem.Web.Controllers
             
             Tool toolToUpdate = await GetTool(toolId);
 
+            // TODO: extract method with this functionality...?
+            string userNameFull = User.Identity.Name;
+            string userNameShort = userNameFull.Substring(0, userNameFull.IndexOf('@'));
+
+            toolToUpdate.ToolLastUpdated = DateTime.Now;
+            toolToUpdate.ToolUpdatedBy = userNameShort;
+
             if (await TryUpdateModelAsync<Tool>(
                 toolToUpdate,
                 "",
@@ -128,6 +136,13 @@ namespace ToolRentalSystem.Web.Controllers
         //[ValidateAntiForgeryToken]
         public IActionResult AddToolPost(Tool newTool)
         {
+            // TODO: extract method with this functionality...?
+            string userNameFull = User.Identity.Name;
+            string userNameShort = userNameFull.Substring(0, userNameFull.IndexOf('@'));
+
+            newTool.ToolLastUpdated = DateTime.Now;
+            newTool.ToolUpdatedBy = userNameShort;
+            
             _context.Tool.Add(newTool);
             _context.SaveChanges();
             ViewBag.Message = "New tool successfully added to the inventory!";
@@ -135,10 +150,8 @@ namespace ToolRentalSystem.Web.Controllers
             ViewBag.LinkMessage = "Back to Tools"; // message shown for link on confirmation screen
             return View("Confirmation");
         }
-
-
-
-                public async Task<IActionResult> DeleteTool(int? toolID)
+        
+        public async Task<IActionResult> DeleteTool(int? toolID)
         {
             if (toolID == null)
             {
@@ -146,8 +159,7 @@ namespace ToolRentalSystem.Web.Controllers
             }
 
             Tool tool = await GetTool(toolID);
-            
-            
+
             if (tool == null)
             {
                 return NotFound();
@@ -158,7 +170,7 @@ namespace ToolRentalSystem.Web.Controllers
 
         [HttpPost, ActionName("DeleteTool")]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteToollPost(int? toolID)
+        public async Task<IActionResult> DeleteToolPost(int? toolID)
         {
             if (toolID == null)
             {
@@ -187,9 +199,10 @@ namespace ToolRentalSystem.Web.Controllers
 
                 return RedirectToAction(nameof(DeleteTool), new { toolId = toolToDelete.ToolId });
             }
+
             return View(toolToDelete);
         }
-
+        
         // Private helper method to return a Tool.
         private async Task<Tool> GetTool(int? toolId)
         {
@@ -258,7 +271,7 @@ namespace ToolRentalSystem.Web.Controllers
 
             return View();
         }
-
+        
         [Authorize(Roles = "Admin, Manager")]
         [HttpPost, ActionName("RentOutTool")]
         //[ValidateAntiForgeryToken]
