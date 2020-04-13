@@ -337,6 +337,54 @@ namespace ToolRentalSystem.Web.Controllers
             return rental;
         }
 
+        
+        
+
+
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<IActionResult> Reservation()
+        {
+
+            List<Rental> list = await _context.Rental
+                .Where(t => t.RentalStatus.Equals("reserved"))
+                .AsNoTracking()
+                .ToListAsync();
+            
+            return View(list);
+        }
+
+
+        public async Task<IActionResult> ReserveTool(int? toolId)
+        {
+            ViewBag.ToolId = toolId;
+            
+             List<User> userList = await _context.User 
+                .AsNoTracking()
+                .ToListAsync();
+            
+            // fill a drop down list with the user ids of users in the database
+            ViewBag.UserDropDownList = new SelectList(userList, "UserId", "UserId");
+
+            return View();
+        }
+
+
+
+        [HttpPost, ActionName("ReserveTool")]
+         public IActionResult ReserveToolPost(Rental newRental)
+        {
+            _context.Rental.Add(newRental);
+            _context.SaveChanges();
+
+            ViewBag.Message = "Tool successfully reserved to the user!";
+            ViewBag.Link = "ReserveTool";
+            ViewBag.LinkMessage = "Back to Reserve Tool";// location that link on confirmation screen leads to
+            return View("Confirmation");// message shown for link on confirmation screen
+        }
+
+
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

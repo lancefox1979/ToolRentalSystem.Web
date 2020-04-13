@@ -63,13 +63,20 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
                         <a asp-action="ToolDetails" asp-route-toolid="@item.ToolId">Details</a> |
                         <a asp-action="DeleteTool" asp-route-toolid="@item.ToolId">Delete</a>
                     </td>
+                  
                 }
+                    <td> 
+                        <a asp-action="ReserveTool" asp-route-toolid="@item.ToolId">Reserve</a>
+                    </td>
+                 
+        
             </tr>
         }
+       
     </tbody>
 </table>
 
 <script type="text/javascript" class="init"> 
     // jquery script to initialize datatable structure
-    $("#tools_table").DataTable();
-</script>
+    $("#tools_table").DataTable();    
+</script> 
