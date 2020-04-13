@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace ToolRentalSystem.Web.Controllers
         {
             _context = context;
         }
-        
+
         public async Task<IActionResult> Tools()
         {
             //List<Tool> list = await _context.Tool.ToListAsync();
@@ -93,6 +94,13 @@ namespace ToolRentalSystem.Web.Controllers
             
             Tool toolToUpdate = await GetTool(toolId);
 
+            // TODO: extract method with this functionality...?
+            string userNameFull = User.Identity.Name;
+            string userNameShort = userNameFull.Substring(0, userNameFull.IndexOf('@'));
+
+            toolToUpdate.ToolLastUpdated = DateTime.Now;
+            toolToUpdate.ToolUpdatedBy = userNameShort;
+
             if (await TryUpdateModelAsync<Tool>(
                 toolToUpdate,
                 "",
@@ -128,6 +136,13 @@ namespace ToolRentalSystem.Web.Controllers
         //[ValidateAntiForgeryToken]
         public IActionResult AddToolPost(Tool newTool)
         {
+            // TODO: extract method with this functionality...?
+            string userNameFull = User.Identity.Name;
+            string userNameShort = userNameFull.Substring(0, userNameFull.IndexOf('@'));
+
+            newTool.ToolLastUpdated = DateTime.Now;
+            newTool.ToolUpdatedBy = userNameShort;
+            
             _context.Tool.Add(newTool);
             _context.SaveChanges();
             ViewBag.Message = "New tool successfully added to the inventory!";
@@ -135,46 +150,105 @@ namespace ToolRentalSystem.Web.Controllers
             ViewBag.LinkMessage = "Back to Tools"; // message shown for link on confirmation screen
             return View("Confirmation");
         }
+        
+        // public async Task<IActionResult> DeleteTool(int? toolID)
+        // {
+        //     if (toolID == null)
+        //     {
+        //         return NotFound();
+        //     }
 
+        //     Tool tool = await GetTool(toolID);
 
+        //     if (tool == null)
+        //     {
+        //         return NotFound();
+        //     }
 
-                public async Task<IActionResult> DeleteTool(int? toolID)
-        {
-            if (toolID == null)
-            {
-                return NotFound();
-            }
+        //     return View(tool);
+        // }
 
-            Tool tool = await GetTool(toolID);
+        // [HttpPost, ActionName("DeleteTool")]
+        // //[ValidateAntiForgeryToken]
+        // public async Task<IActionResult> DeleteToolPost(int? toolID)
+        // {
+        //     if (toolID == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     Tool toolToDelete = await GetTool(toolID);
             
-            
-            if (tool == null)
-            {
-                return NotFound();
-            }
+        //     if (await TryUpdateModelAsync<Tool>(
+        //         toolToDelete,
+        //         "",
+        //         t => t.ToolStatus))
+        //     {
+        //         try
+        //         {
+        //             _context.Entry(toolToDelete).State = EntityState.Modified;
 
-            return View(tool);
-        }
+        //             await _context.SaveChangesAsync();
+        //         }
 
-        [HttpPost, ActionName("DeleteTool")]
+        //         catch (DbUpdateException ex)
+        //         {
+        //             // ex.ToString();
+        //             ModelState.AddModelError("", "Cannot update Tool: " + ex.ToString());
+        //         }
+
+        //         return RedirectToAction(nameof(DeleteTool), new { toolId = toolToDelete.ToolId });
+        //     }
+
+        //     return View(toolToDelete);
+        // }
+        
+        [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteToollPost(int? toolID)
+        public async Task<IActionResult> UpdateStatusPost(int? toolID, string statusResponse)
         {
             if (toolID == null)
             {
                 return NotFound();
             }
 
-            Tool toolToDelete = await GetTool(toolID);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Tool toolToUpdate = await GetTool(toolID);
+
+            // TODO: extract method with this functionality...?
+            string userNameFull = User.Identity.Name;
+            string userNameShort = userNameFull.Substring(0, userNameFull.IndexOf('@'));
+
+            toolToUpdate.ToolLastUpdated = DateTime.Now;
+            toolToUpdate.ToolUpdatedBy = userNameShort;
             
             if (await TryUpdateModelAsync<Tool>(
-                toolToDelete,
+                toolToUpdate,
                 "",
                 t => t.ToolStatus))
             {
                 try
                 {
-                    _context.Entry(toolToDelete).State = EntityState.Modified;
+                    _context.Entry(toolToUpdate).State = EntityState.Modified;
+
+                    if (statusResponse.ToUpper().Equals("DEACTIVATE"))
+                    {
+                        toolToUpdate.ToolStatus = "inactive";
+                    }
+
+                    else if (statusResponse.ToUpper().Equals("REACTIVATE"))
+                    {
+                        toolToUpdate.ToolStatus = "active";
+                    }
+
+                    else
+                    {
+                        return BadRequest("Invalid request: " + statusResponse);
+                    }
 
                     await _context.SaveChangesAsync();
                 }
@@ -185,9 +259,10 @@ namespace ToolRentalSystem.Web.Controllers
                     ModelState.AddModelError("", "Cannot update Tool: " + ex.ToString());
                 }
 
-                return RedirectToAction(nameof(DeleteTool), new { toolId = toolToDelete.ToolId });
+                return RedirectToAction(nameof(EditTool), new { toolId = toolToUpdate.ToolId });
             }
-            return View(toolToDelete);
+
+            return View();
         }
 
         // Private helper method to return a Tool.
@@ -258,7 +333,7 @@ namespace ToolRentalSystem.Web.Controllers
 
             return View();
         }
-
+        
         [Authorize(Roles = "Admin, Manager")]
         [HttpPost, ActionName("RentOutTool")]
         //[ValidateAntiForgeryToken]
