@@ -32,6 +32,10 @@
                 </select>
             </div>
         } else { // if rent out tool accessed through reservations page
+            <div class="form-group">
+                <input asp-for="RentalId" class="form-control" value="@ViewBag.Rental.RentalId" readonly type="hidden">
+            </div>
+
             // AspNetUser id
             <div class="form-group">
                 <label asp-for="AspNetUserId" class="control-label">Asp Net User ID</label><br />

@@ -349,10 +349,31 @@ namespace ToolRentalSystem.Web.Controllers
         [Authorize(Roles = "Admin, Manager")]
         [HttpPost, ActionName("RentOutTool")]
         //[ValidateAntiForgeryToken]
-        public IActionResult RentOutToolPost(Rental newRental)
+        public async Task<IActionResult> RentOutToolPost(Rental rental = null, int? rentalId = null)
         {
-            _context.Rental.Add(newRental);
-            _context.SaveChanges();
+            if (rentalId != null) {
+                if (await TryUpdateModelAsync<Rental>(
+                    rental,
+                    "",
+                    t => t.AspNetUserId, t => t.UserId, t => t.StartDate, t => t.DueDate, t => t.RentalStatus))
+                {
+                    try
+                    {
+                        _context.Entry(rental).State = EntityState.Modified;
+
+                        await _context.SaveChangesAsync();
+                    }
+
+                    catch (DbUpdateException ex)
+                    {
+                        // ex.ToString();
+                        ModelState.AddModelError("", "Cannot update Tool: " + ex.ToString());
+                    }
+                }
+            } else {
+                _context.Rental.Add(rental);
+                _context.SaveChanges();
+            }
 
             ViewBag.Message = "Tool successfully rented out to the user!";
             ViewBag.Link = "RentOutTool";
