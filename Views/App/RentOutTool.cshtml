@@ -1,7 +1,3 @@
-@{
-
-}
-
 @model ToolRentalSystem.Web.Models.Database.Rental
 
 @{
@@ -19,46 +15,51 @@
 @using (Html.BeginForm())
 {
     <div class="input-group">
+        @if (ViewBag.Rental == null) { // if rent out tool accessed from nav bar
+            // select AspNetUser id
+            <div class="form-group">
+                <label asp-for="AspNetUserId" class="control-label">Asp Net User ID</label><br />
+                <select asp-for="AspNetUserId" class="form-control" asp-items="ViewBag.AspNetUserDropDownList" required>
+                    <option value="">-- Select a User --</option>
+                </select>
+            </div> 
 
-        @* For switch to AspNetUser id
-        <div class="form-group">
-            <label asp-for="AspNetUserId" class="control-label">Asp Net User ID</label><br />
-            <select asp-for="AspNetUserId" class="form-control" asp-items="ViewBag.AspNetUserDropDownList" required>
-                <option value="">-- Select a User --</option>
-            </select>
-        </div> *@
+            // select tool id
+            <div class="form-group">
+                <label asp-for="ToolId" class="control-label">Tool ID</label><br />
+                <select asp-for="ToolId" class="form-control" asp-items="ViewBag.ToolDropDownList" required>
+                    <option value="">-- Select a Tool --</option>
+                </select>
+            </div>
+        } else { // if rent out tool accessed through reservations page
+            // AspNetUser id
+            <div class="form-group">
+                <label asp-for="AspNetUserId" class="control-label">Asp Net User ID</label><br />
+                <input asp-for="AspNetUserId" class="form-control" value="@ViewBag.Rental.AspNetUserId" readonly>
+            </div>
 
-        @* select user id *@
-        <div class="form-group">
-            <label asp-for="UserId" class="control-label">User ID</label><br />
-            <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserDropDownList" required>
-                <option value="">-- Select a User --</option>
-            </select>
-        </div>
-
-        @* select tool id *@
-        <div class="form-group">
-            <label asp-for="ToolId" class="control-label">Tool ID</label><br />
-            <select asp-for="ToolId" class="form-control" asp-items="ViewBag.ToolDropDownList" required>
-                <option value="">-- Select a Tool --</option>
-            </select>
-        </div>
+            // tool id
+            <div class="form-group">
+                <label asp-for="ToolId" class="control-label">Tool ID</label><br />
+                <input asp-for="ToolId" class="form-control" value="@ViewBag.Rental.ToolId" readonly>
+            </div>
+        }
 
         @* start date is current date (read only) *@
         <div class="form-group">
             <label asp-for="StartDate" class="control-label">Start Date</label><br />
-            <input asp-for="StartDate" class="form-control" type="datetime-local" value="@startDate" readonly>
+            <input asp-for="StartDate" class="form-control" value="@startDate" readonly>
         </div>
         
         @* due date two weeks past start date (read only) *@
         <div class="form-group">
             <label asp-for="DueDate" class="control-label">Due Date</label><br />
-            <input asp-for="DueDate" class="form-control" type="datetime-local" value="@dueDate" readonly>
+            <input asp-for="DueDate" class="form-control" value="@dueDate" readonly>
         </div>
 
-        @* rental status is sent to rented, this input is hidden *@
+        @* rental status is set to rented, this input is hidden *@
         <div class="form-group">
-            <input asp-for="RentalStatus" class="form-control" value="rented" readonly type="hidden">
+            <input asp-for="RentalStatus" class="form-control" value="rented" readonly type="hidden" />
         </div>
 
     </div>

@@ -14,10 +14,10 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
 
 
 @{
-    ViewBag.Title = "Reservation";
+    ViewBag.Title = "Reservations";
 }
 
-<h3>Reservation</h3>
+<h3>Reservations</h3>
 
 <br />
 <table id="reservation_table" class="table table-striped table-bordered dt-responsive nowrap">
@@ -29,6 +29,7 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
             <th>Start Date</th>
             <th>Due Date</th>
             <th>Rental Status</th>
+            <th></th>
             
         </tr>
     </thead>
@@ -42,7 +43,7 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
                 <td>@item.StartDate</td>
                 <td>@item.DueDate</td>
                 <td>@item.RentalStatus</td>
-                
+                <td><a asp-action="RentOutTool" asp-route-rentalid="@item.RentalId">Rent Out</a></td>
              </tr>
          
         }

@@ -298,38 +298,50 @@ namespace ToolRentalSystem.Web.Controllers
         }
 
         [Authorize(Roles = "Admin, Manager")]
-        public async Task<IActionResult> RentOutTool()
+        public async Task<IActionResult> RentOutTool(int? rentalId = null)
         {
-            // get a list of asp net users
-            List<AspNetUsers> aspNetUserList = await _context.AspNetUsers
-                .AsNoTracking()
-                .ToListAsync();
-            
-            // fill a drop down list with the ids of asp net users in the database
-            ViewBag.AspNetUserDropDownList = new SelectList(aspNetUserList, "Id", "Id");
+            if (rentalId == null) {
+                // get a list of asp net users
+                List<AspNetUsers> aspNetUserList = await _context.AspNetUsers
+                    .AsNoTracking()
+                    .ToListAsync();
+                
+                // fill a drop down list with the ids of asp net users in the database
+                ViewBag.AspNetUserDropDownList = new SelectList(aspNetUserList, "Id", "Id");
 
-            // get a list of users from the database
-            List<User> userList = await _context.User
-                .AsNoTracking()
-                .ToListAsync();
-            
-            // fill a drop down list with the user ids of users in the database
-            ViewBag.UserDropDownList = new SelectList(userList, "UserId", "UserId");
+                // get a list of users from the database
+                List<User> userList = await _context.User
+                    .AsNoTracking()
+                    .ToListAsync();
+                
+                // fill a drop down list with the user ids of users in the database
+                ViewBag.UserDropDownList = new SelectList(userList, "UserId", "UserId");
 
-            // get a list of the tools that are currently rented out or reserved
-            var rentals = _context.Rental
-                .Where(t => t.RentalStatus.Equals("rented") || t.RentalStatus.Equals("reserved"))
-                .Select(t => t.ToolId)
-                .ToList();
+                // get a list of the tools that are currently rented out or reserved
+                var rentals = _context.Rental
+                    .Where(t => t.RentalStatus.Equals("rented") || t.RentalStatus.Equals("reserved"))
+                    .Select(t => t.ToolId)
+                    .ToList();
 
-            // get a list of those tools that are active and not currently rented or reserved
-            List<Tool> toolList = await _context.Tool
-                .Where(t => t.ToolStatus.Equals("active") && !(rentals.Contains(t.ToolId)))
-                .AsNoTracking()
-                .ToListAsync();
-            
-            // fill the drop down list with tools that can be rented
-            ViewBag.ToolDropDownList = new SelectList(toolList, "ToolId", "ToolId");
+                // get a list of those tools that are active and not currently rented or reserved
+                List<Tool> toolList = await _context.Tool
+                    .Where(t => t.ToolStatus.Equals("active") && !(rentals.Contains(t.ToolId)))
+                    .AsNoTracking()
+                    .ToListAsync();
+                
+                // fill the drop down list with tools that can be rented
+                ViewBag.ToolDropDownList = new SelectList(toolList, "ToolId", "ToolId");
+            } else {
+                // if rent out tool accessed through reservations page
+                Rental rental = await GetRental(rentalId);
+
+                if (rental == null)
+                {
+                    return NotFound();
+                }
+
+                ViewBag.Rental = rental;
+            }
 
             return View();
         }
@@ -412,12 +424,8 @@ namespace ToolRentalSystem.Web.Controllers
             return rental;
         }
 
-        
-        
-
-
         [Authorize(Roles = "Admin, Manager")]
-        public async Task<IActionResult> Reservation()
+        public async Task<IActionResult> Reservations()
         {
 
             List<Rental> list = await _context.Rental
@@ -427,7 +435,6 @@ namespace ToolRentalSystem.Web.Controllers
             
             return View(list);
         }
-
 
         public async Task<IActionResult> ReserveTool(int? toolId)
         {
@@ -443,8 +450,6 @@ namespace ToolRentalSystem.Web.Controllers
             return View();
         }
 
-
-
         [HttpPost, ActionName("ReserveTool")]
          public IActionResult ReserveToolPost(Rental newRental)
         {
@@ -456,9 +461,6 @@ namespace ToolRentalSystem.Web.Controllers
             ViewBag.LinkMessage = "Back to Reserve Tool";// location that link on confirmation screen leads to
             return View("Confirmation");// message shown for link on confirmation screen
         }
-
-
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
