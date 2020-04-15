@@ -309,14 +309,6 @@ namespace ToolRentalSystem.Web.Controllers
                 // fill a drop down list with the ids of asp net users in the database
                 ViewBag.AspNetUserDropDownList = new SelectList(aspNetUserList, "Id", "Id");
 
-                // get a list of users from the database
-                List<User> userList = await _context.User
-                    .AsNoTracking()
-                    .ToListAsync();
-                
-                // fill a drop down list with the user ids of users in the database
-                ViewBag.UserDropDownList = new SelectList(userList, "UserId", "UserId");
-
                 // get a list of the tools that are currently rented out or reserved
                 var rentals = _context.Rental
                     .Where(t => t.RentalStatus.Equals("rented") || t.RentalStatus.Equals("reserved"))
@@ -355,7 +347,7 @@ namespace ToolRentalSystem.Web.Controllers
                 if (await TryUpdateModelAsync<Rental>(
                     rental,
                     "",
-                    t => t.AspNetUserId, t => t.UserId, t => t.StartDate, t => t.DueDate, t => t.RentalStatus))
+                    t => t.AspNetUserId, t => t.StartDate, t => t.DueDate, t => t.RentalStatus))
                 {
                     try
                     {
@@ -460,13 +452,14 @@ namespace ToolRentalSystem.Web.Controllers
         public async Task<IActionResult> ReserveTool(int? toolId)
         {
             ViewBag.ToolId = toolId;
-            
-             List<User> userList = await _context.User 
-                .AsNoTracking()
-                .ToListAsync();
-            
-            // fill a drop down list with the user ids of users in the database
-            ViewBag.UserDropDownList = new SelectList(userList, "UserId", "UserId");
+
+            // get a list of asp net users
+                List<AspNetUsers> aspNetUserList = await _context.AspNetUsers
+                    .AsNoTracking()
+                    .ToListAsync();
+                
+            // fill a drop down list with the ids of asp net users in the database
+            ViewBag.AspNetUserDropDownList = new SelectList(aspNetUserList, "Id", "Id");
 
             return View();
         }

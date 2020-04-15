@@ -6,45 +6,42 @@
     ViewBag.Title = "Reserve Tool";
     
     DateTime startDateTime = DateTime.Now; // set start date to current date
+    var startDate = startDateTime.ToString("s"); // format date to show correctly in html
     TimeSpan rentalTime = new TimeSpan(1, 0, 0, 0); // one day
-    DateTime dueDateTime = startDateTime.Add(rentalTime); // set due date to one day
-
-    // format dates to remove time
-    var startDate = startDateTime.ToString("yyyy-MM-dd");
-    var dueDate = dueDateTime.ToString("yyyy-MM-dd");
+    DateTime dueDateTime = startDateTime.Add(rentalTime); // set due date to one day from current date
+    var dueDate = dueDateTime.ToString("s"); // format date to show correctly in html
 
 }
 
 <h2>Reserve Tool</h2>
 
-
 @using (Html.BeginForm())
 {
-    
-
      <div class="form-group">
-        <label asp-for="ToolId" class="control-label"></label><br />
+        <label asp-for="ToolId" class="control-label">Tool ID</label><br />
         <input asp-for="ToolId" class="form-control" value= "@ViewBag.ToolId" readonly required>
         @*<div>@Html.EditorFor(model => model.ToolType)</div>*@
     </div>
      
     <div class="form-group">
-        <label asp-for="UserId" class="control-label">User ID</label><br />
-        <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserDropDownList" required>
+        <label asp-for="AspNetUserId" class="control-label">User ID</label><br />
+        <select asp-for="AspNetUserId" class="form-control" asp-items="ViewBag.AspNetUserDropDownList" required>
             <option value="">-- Select a User --</option>
         </select>
     </div>
 
     <div class="form-group">
         <label asp-for="StartDate" class="control-label">Start Date</label>
-        <div>@Html.ValidationMessageFor(model => model.StartDate)</div>
-         <div>@Html.EditorFor(model => model.StartDate)</div>
+        <input asp-for="StartDate" class="form-control" value="@startDate" readonly>
+        @* <div>@Html.ValidationMessageFor(model => model.StartDate)</div>
+         <div>@Html.EditorFor(model => model.StartDate)</div> *@
     </div>
 
     <div class="form-group">
         <label asp-for="DueDate" class="control-label">Due Date</label>
-       <div>@Html.ValidationMessageFor(model => model.DueDate)</div>
-       <div>@Html.EditorFor(model => model.DueDate)</div>
+        <input asp-for="DueDate" class="form-control" value="@dueDate" readonly>
+       @* <div>@Html.ValidationMessageFor(model => model.DueDate)</div>
+       <div>@Html.EditorFor(model => model.DueDate)</div> *@
     </div>
 
 

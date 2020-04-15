@@ -47,6 +47,7 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
                 <th>Status</th>
                 <th></th>
             }
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -65,13 +66,10 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
                         <a asp-action="EditTool" asp-route-toolid="@item.ToolId">Edit</a> |
                         <a asp-action="ToolDetails" asp-route-toolid="@item.ToolId">Details</a> 
                     </td>
-                  
                 }
-                    <td> 
-                        <a asp-action="ReserveTool" asp-route-toolid="@item.ToolId">Reserve</a>
-                    </td>
-                 
-        
+                <td> 
+                    <a asp-action="ReserveTool" asp-route-toolid="@item.ToolId">Reserve</a>
+                </td>
             </tr>
         }
        
