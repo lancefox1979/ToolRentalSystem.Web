@@ -1,8 +1,10 @@
-@{
-}
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 @model ToolRentalSystem.Web.Models.Database.Rental
 
 @{
+    var isAuthorized = (await AuthorizationService.AuthorizeAsync(User, "ElevatedRights")).Succeeded;
+
     ViewBag.Title = "Reserve Tool";
     
     DateTime startDateTime = DateTime.Now; // set start date to current date
@@ -17,17 +19,24 @@
 
 @using (Html.BeginForm())
 {
+    if (isAuthorized) { // If user is an admin, choose user id for reservation
+        <div class="form-group">
+            <label asp-for="AspNetUserId" class="control-label">User ID</label><br />
+            <select asp-for="AspNetUserId" class="form-control" asp-items="ViewBag.AspNetUserDropDownList" required>
+                <option value="">-- Select a User --</option>
+            </select>
+        </div>
+    } else { // if user is a client, can only reseve for their user id
+        <div class="form-group">
+            <label asp-for="AspNetUserId" class="control-label">User ID</label><br />
+            <input asp-for="AspNetUserId" class="form-control" value="@ViewBag.User.Id" readonly required>
+        </div>
+    }
+
      <div class="form-group">
         <label asp-for="ToolId" class="control-label">Tool ID</label><br />
         <input asp-for="ToolId" class="form-control" value= "@ViewBag.ToolId" readonly required>
         @*<div>@Html.EditorFor(model => model.ToolType)</div>*@
-    </div>
-     
-    <div class="form-group">
-        <label asp-for="AspNetUserId" class="control-label">User ID</label><br />
-        <select asp-for="AspNetUserId" class="form-control" asp-items="ViewBag.AspNetUserDropDownList" required>
-            <option value="">-- Select a User --</option>
-        </select>
     </div>
 
     <div class="form-group">

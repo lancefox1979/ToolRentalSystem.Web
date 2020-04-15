@@ -451,12 +451,20 @@ namespace ToolRentalSystem.Web.Controllers
 
         public async Task<IActionResult> ReserveTool(int? toolId)
         {
+            // get current user's name
+            string userNameFull = User.Identity.Name;
+
+            // get current user's id
+            ViewBag.User = await _context.AspNetUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.UserName.Equals(userNameFull, StringComparison.InvariantCultureIgnoreCase));
+
             ViewBag.ToolId = toolId;
 
             // get a list of asp net users
-                List<AspNetUsers> aspNetUserList = await _context.AspNetUsers
-                    .AsNoTracking()
-                    .ToListAsync();
+            List<AspNetUsers> aspNetUserList = await _context.AspNetUsers
+                .AsNoTracking()
+                .ToListAsync();
                 
             // fill a drop down list with the ids of asp net users in the database
             ViewBag.AspNetUserDropDownList = new SelectList(aspNetUserList, "Id", "Id");
@@ -471,9 +479,9 @@ namespace ToolRentalSystem.Web.Controllers
             _context.SaveChanges();
 
             ViewBag.Message = "Tool successfully reserved to the user!";
-            ViewBag.Link = "ReserveTool";
-            ViewBag.LinkMessage = "Back to Reserve Tool";// location that link on confirmation screen leads to
-            return View("Confirmation");// message shown for link on confirmation screen
+            ViewBag.Link = "Tools"; // location that link on confirmation screen leads to
+            ViewBag.LinkMessage = "Back to Tools"; // message shown for link on confirmation screen
+            return View("Confirmation");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
