@@ -452,9 +452,53 @@ namespace ToolRentalSystem.Web.Controllers
             return View(list);
         }
 
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<IActionResult> CancelReservation(int? rentalId)
+        {  
+            if (rentalId == null)
+            {
+                return NotFound();
+            }
+
+            Rental reservation = await GetRental(rentalId);
+
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+            
+            return View(reservation);
+        }
+
+        [Authorize(Roles = "Admin, Manager")]
+        [HttpPost, ActionName("CancelReservation")]
+        public IActionResult CancelReservationPost(Rental reservation)
+        {
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+            
+            try {
+                // try to delete reservation
+                _context.Entry(reservation).State = EntityState.Deleted;
+                _context.SaveChanges();
+            } catch (DbUpdateException ex) {
+                // ex.ToString();
+                ModelState.AddModelError("", "Cannot delete reservation: " + ex.ToString());
+            }
+
+            ViewBag.Message = "Reservation successfully cancelled!";
+            ViewBag.Link = "Reservations"; // location that link on confirmation screen leads to
+            ViewBag.LinkMessage = "Back to Reservations"; // message shown for link on confirmation screen
+            return View("Confirmation");
+        }
+
         [Authorize(Roles = "Admin, Manager, Customer")]
         public async Task<IActionResult> ReserveTool(int? toolId)
         {
+            ViewBag.ToolId = toolId;
+
             // get current user's name
             string userNameFull = User.Identity.Name;
 
@@ -462,8 +506,6 @@ namespace ToolRentalSystem.Web.Controllers
             ViewBag.User = await _context.AspNetUsers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.UserName.Equals(userNameFull, StringComparison.InvariantCultureIgnoreCase));
-
-            ViewBag.ToolId = toolId;
 
             // get a list of asp net users
             List<AspNetUsers> aspNetUserList = await _context.AspNetUsers

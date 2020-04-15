@@ -30,6 +30,7 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
             <th>Due Date</th>
             <th>Rental Status</th>
             <th></th>
+            <th></th>
             
         </tr>
     </thead>
@@ -44,8 +45,8 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
                 <td>@item.DueDate</td>
                 <td>@item.RentalStatus</td>
                 <td><a asp-action="RentOutTool" asp-route-rentalid="@item.RentalId">Rent Out</a></td>
+                <td><a asp-action="CancelReservation" asp-route-rentalid="@item.RentalId">Cancel Reservation</a></td>
              </tr>
-         
         }
     </tbody>
 </table>

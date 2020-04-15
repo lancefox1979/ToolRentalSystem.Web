@@ -1,0 +1,53 @@
+@model ToolRentalSystem.Web.Models.Database.Rental
+
+@{
+    ViewBag.Title = "Cancel Reservation";
+}
+
+<h2>Cancel Reservation</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="input-group">
+        
+        <div class="form-group">
+            <input asp-for="RentalId" class="form-control" readonly type="hidden">
+        </div>
+
+        @* AspNetUser id *@
+        <div class="form-group">
+            <label asp-for="AspNetUserId" class="control-label">Asp Net User ID</label><br />
+            <input asp-for="AspNetUserId" class="form-control" readonly>
+        </div>
+
+        @* tool id *@
+        <div class="form-group">
+            <label asp-for="ToolId" class="control-label">Tool ID</label><br />
+            <input asp-for="ToolId" class="form-control" readonly>
+        </div>
+
+        @* start date *@
+        <div class="form-group">
+            <label asp-for="StartDate" class="control-label">Start Date</label><br />
+            <input asp-for="StartDate" class="form-control" readonly>
+        </div>
+        
+        @* due date *@
+        <div class="form-group">
+            <label asp-for="DueDate" class="control-label">Due Date</label><br />
+            <input asp-for="DueDate" class="form-control" readonly>
+        </div>
+
+        @* rental status, this input is hidden *@
+        <div class="form-group">
+            <input asp-for="RentalStatus" class="form-control" readonly type="hidden" />
+        </div>
+
+    </div>
+    
+    <br />
+    
+    <div class="form-group">
+        <input type="submit" value="Cancel Reservation" class="btn btn-default" />
+    </div>
+}
