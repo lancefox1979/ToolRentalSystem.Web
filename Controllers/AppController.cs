@@ -32,10 +32,7 @@ namespace ToolRentalSystem.Web.Controllers
                 list = await _context.Tool
                     .AsNoTracking()
                     .ToListAsync();
-            }
-
-            else
-            {
+            } else {
                 list = await _context.Tool
                     .Where(t => t.ToolStatus.Equals("active"))
                     .AsNoTracking()
@@ -316,10 +313,10 @@ namespace ToolRentalSystem.Web.Controllers
                 ViewBag.AspNetUserDropDownList = new SelectList(aspNetUserList, "Id", "Id");
 
                 // get a list of the tools that are currently rented out or reserved
-                var rentals = _context.Rental
+                var rentals = await _context.Rental
                     .Where(t => t.RentalStatus.Equals("rented") || t.RentalStatus.Equals("reserved"))
                     .Select(t => t.ToolId)
-                    .ToList();
+                    .ToListAsync();
 
                 // get a list of those tools that are active and not currently rented or reserved
                 List<Tool> toolList = await _context.Tool
