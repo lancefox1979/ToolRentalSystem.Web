@@ -11,31 +11,31 @@
     <div class="input-group">
 
         <div class="form-group">
-            <label asp-for="ToolId" class="control-label"></label>
+            <label asp-for="ToolId" class="control-label">Tool ID</label>
             <input asp-for="ToolId" class="form-control" readonly/>
             @* <div>@Html.DisplayFor(model => model.ToolId)</div> *@
         </div>
         
         <div class="form-group">
-            <label asp-for="ToolType" class="control-label"></label>
+            <label asp-for="ToolType" class="control-label">Tool Type</label>
             <input asp-for="ToolType" class="form-control" readonly/>
             @* <div>@Html.DisplayFor(model => model.ToolClassification)</div> *@
         </div>
 
         <div class="form-group">
-            <label asp-for="ToolBrand" class="control-label"></label>
+            <label asp-for="ToolBrand" class="control-label">Tool Brand</label>
             <input asp-for="ToolBrand" class="form-control" />
             @* <div>@Html.EditorFor(model => model.ToolBrand)</div> *@
         </div>
 
         <div class="form-group">
-            <label asp-for="TradeName" class="control-label"></label>
+            <label asp-for="TradeName" class="control-label">Trade Name</label>
             <input asp-for="TradeName" class="form-control" />
             @* <div>@Html.EditorFor(model => model.TradeName)</div> *@
         </div>
 
         <div class="form-group">
-            <label asp-for="ToolCondition" class="control-label"></label>
+            <label asp-for="ToolCondition" class="control-label">Tool Condition</label>
             @* <div>@Html.EditorFor(model => model.ToolCondition)</div> *@
             <div>
                 @Html.DropDownListFor(
@@ -46,7 +46,7 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="ToolStatus" class="control-label"></label>
+            <label asp-for="ToolStatus" class="control-label">Tool Status</label>
             <input asp-for="ToolStatus" class="form-control" readonly/>
             @* @Html.TextBoxFor(model => model.ToolStatus, new { disabled = "disabled", @readonly = true }) *@
         </div>
