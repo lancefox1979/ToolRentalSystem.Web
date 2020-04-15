@@ -42,6 +42,12 @@ namespace ToolRentalSystem.Web.Controllers
                     .ToListAsync();
             }
 
+            // save a list of the tool ids for tools that are currently rented out or reserved
+            ViewBag.UnavailableToolIds = await _context.Rental
+                .Where(t => t.RentalStatus.Equals("rented") || t.RentalStatus.Equals("reserved"))
+                .Select(t => t.ToolId)
+                .ToListAsync();
+
             return View(list);
         }
 
@@ -449,6 +455,7 @@ namespace ToolRentalSystem.Web.Controllers
             return View(list);
         }
 
+        [Authorize(Roles = "Admin, Manager, Customer")]
         public async Task<IActionResult> ReserveTool(int? toolId)
         {
             // get current user's name
@@ -472,6 +479,7 @@ namespace ToolRentalSystem.Web.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin, Manager, Customer")]
         [HttpPost, ActionName("ReserveTool")]
          public IActionResult ReserveToolPost(Rental newRental)
         {
