@@ -415,6 +415,8 @@ namespace ToolRentalSystem.Web.Controllers
                 {
                     _context.Entry(rentalToUpdate).State = EntityState.Modified;
 
+                    rentalToUpdate.RentalStatus = "returned";
+
                     await _context.SaveChangesAsync();
                 }
 
@@ -424,10 +426,14 @@ namespace ToolRentalSystem.Web.Controllers
                     ModelState.AddModelError("", "Cannot update Rental: " + ex.ToString());
                 }
 
-                return RedirectToAction(nameof(ReturnTool), new { rentalId = rentalToUpdate.RentalId });
+                //return RedirectToAction(nameof(ReturnTool), new { rentalId = rentalToUpdate.RentalId });
             }
 
-            return View(rentalToUpdate);
+            ViewBag.Message = "Tool was successfully returned!";
+            ViewBag.Link = "Rentals";
+            ViewBag.LinkMessage = "Back to Rentals";
+
+            return View("Confirmation");
         }
 
         // Private helper method to return a Rental.
