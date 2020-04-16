@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using ToolRentalSystem.Web.Models;
 using ToolRentalSystem.Web.Models.Database;
 
@@ -15,10 +17,12 @@ namespace ToolRentalSystem.Web.Controllers
     public class AppController : Controller
     {
         private readonly ToolRentalSystemDBContext _context;
+        private readonly IServiceProvider _provider;
 
-        public AppController(ToolRentalSystemDBContext context)
+        public AppController(ToolRentalSystemDBContext context, IServiceProvider provider)
         {
             _context = context;
+            _provider = provider;
         }
 
         public async Task<IActionResult> Tools()
@@ -292,10 +296,36 @@ namespace ToolRentalSystem.Web.Controllers
         {
             //List<Rental> list = await _context.Rental.ToListAsync();
 
-            List<Rental> list = await _context.Rental
-                .Where(t => t.RentalStatus.Equals("rented"))
-                .AsNoTracking()
-                .ToListAsync();
+            List<Rental> list;
+            IdentityUser user;
+
+            string userName = User.Identity.Name;
+            string userId = "";
+
+            using (IServiceScope scope = _provider.CreateScope())
+            {
+                UserManager<IdentityUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+                user = await userManager.FindByEmailAsync(userName);
+                userId = user.Id;
+            }
+
+            if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Employee"))
+            {
+                list = await _context.Rental
+                    .Where(r => r.RentalStatus.Equals("rented"))
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+
+            else
+            {
+                list = await _context.Rental
+                    .Where(r => r.RentalStatus.Equals("rented"))
+                    .Where(r => r.AspNetUserId.Equals(userId))
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
             
             return View(list);
         }
