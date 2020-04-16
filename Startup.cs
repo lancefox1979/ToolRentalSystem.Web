@@ -59,6 +59,7 @@ namespace ToolRentalSystem.Web
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ElevatedRights", policy => policy.RequireRole(new string[] { "Admin", "Manager" }));
+                options.AddPolicy("LoggedIn", policy => policy.RequireRole(new string[] { "Admin", "Manager", "Employee", "Customer" }));
             });
 
             services.Configure<IdentityOptions>(options =>
