@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 @model IEnumerable<ToolRentalSystem.Web.Models.Database.Rental>
 
 <!-- 
@@ -14,6 +16,8 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
 
 @{
     ViewBag.Title = "Rentals";
+
+    var isAuthorized = (await AuthorizationService.AuthorizeAsync(User, "ElevatedRights")).Succeeded;
 }
 
 <h3>Rentals</h3>
@@ -46,9 +50,12 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
                 <td>@startDate.Value.ToString("yyyy-MM-dd")</td>
                 <td>@dueDate.Value.ToString("yyyy-MM-dd")</td>
                 <td>@item.RentalStatus</td>
-                <td>
-                    <a asp-action="ReturnTool" asp-route-rentalid="@item.RentalId">Return Tool</a>
-                </td>
+                @if (isAuthorized)
+                {
+                    <td>
+                        <a asp-action="ReturnTool" asp-route-rentalid="@item.RentalId">Return Tool</a>
+                    </td>
+                }
             </tr>
         }
     </tbody>
