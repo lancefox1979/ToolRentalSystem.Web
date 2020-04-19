@@ -42,6 +42,7 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
             <th>Brand</th>
             <th>Name</th>
             <th>Condition</th>
+            <th>Price</th>
             @if (isAuthorized)
             {
                 <th>Status</th>
@@ -59,6 +60,7 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
                 <td>@item.ToolBrand</td>
                 <td>@item.TradeName</td>
                 <td>@item.ToolCondition</td>
+                <td>@item.ToolPrice</td>
                 @if (isAuthorized)
                 {
                     <td>@item.ToolStatus</td>
