@@ -57,12 +57,17 @@
                     </li>
                     @if (isLoggedIn)
                     {
+
                         <li class="nav-item @(currentPageTitle == "Rentals" ? "active" : "")">
                             <a asp-area="" asp-controller="App" asp-action="Rentals">Rentals</a>
                         </li>
                     }
                     @if (isAuthorized)
-                    {
+                    { 
+                        <li class="nav-item @(currentPageTitle == "Users" ? "active" : "")">
+                            <a asp-area="" asp-controller="App" asp-action="Users">Users</a>
+                        </li>
+                        
                         <li class="nav-item @(currentPageTitle == "Rent Out Tool" ? "active" : "")">
                             <a asp-area="" asp-controller="App" asp-action="RentOutTool">Rent Out Tool</a>
                         </li>

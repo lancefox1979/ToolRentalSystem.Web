@@ -126,10 +126,13 @@ namespace ToolRentalSystem.Web.Controllers
                     ModelState.AddModelError("", "Cannot update Tool: " + ex.ToString());
                 }
 
-                return RedirectToAction(nameof(EditTool), new { toolId = toolToUpdate.ToolId });
+                //return RedirectToAction(nameof(EditTool), new { toolId = toolToUpdate.ToolId });
             }
 
-            return View(toolToUpdate);
+            ViewBag.Message = "Your updates have been saved";
+            ViewBag.Link = "Tools"; 
+            ViewBag.LinkMessage = "Back to Tools"; 
+            return View("Confirmation");
         }
         
         [Authorize(Roles = "Admin, Manager")]
@@ -245,11 +248,21 @@ namespace ToolRentalSystem.Web.Controllers
                     if (statusResponse.ToUpper().Equals("DEACTIVATE"))
                     {
                         toolToUpdate.ToolStatus = "inactive";
+                        ViewBag.Link = "Tools";
+                        ViewBag.LinkMessage = "Back to Tools";
+                        ViewBag.Message = "This item has been deactivated!";
+                        await _context.SaveChangesAsync();
+                        return View("Confirmation");
                     }
 
                     else if (statusResponse.ToUpper().Equals("REACTIVATE"))
                     {
                         toolToUpdate.ToolStatus = "active";
+                        ViewBag.Link = "Tools";
+                        ViewBag.LinkMessage = "Back to Tools";
+                        ViewBag.Message = "This item has been reactivated!";
+                        await _context.SaveChangesAsync();
+                        return View("Confirmation");
                     }
 
                     else
@@ -257,7 +270,7 @@ namespace ToolRentalSystem.Web.Controllers
                         return BadRequest("Invalid request: " + statusResponse);
                     }
 
-                    await _context.SaveChangesAsync();
+                    //await _context.SaveChangesAsync();
                 }
 
                 catch (DbUpdateException ex)
@@ -329,6 +342,18 @@ namespace ToolRentalSystem.Web.Controllers
             
             return View(list);
         }
+
+        
+        public async Task<IActionResult> Users()
+        {
+
+            List<AspNetUsers> list = await _context.AspNetUsers
+                .AsNoTracking()
+                .ToListAsync();
+            
+            return View(list);
+        }
+
 
         [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> RentOutTool(int? rentalId = null)
