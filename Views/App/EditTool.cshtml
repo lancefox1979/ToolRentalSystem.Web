@@ -51,6 +51,12 @@
             @* @Html.TextBoxFor(model => model.ToolStatus, new { disabled = "disabled", @readonly = true }) *@
         </div>
 
+        <div class="form-group">
+            <label asp-for="ToolPrice" class="control-label">Tool Price</label>
+            <input asp-for="ToolPrice" class="form-control" />
+            @* <div>@Html.EditorFor(model => model.ToolPrice)</div> *@
+        </div>
+        
     </div>
 
     <br />
