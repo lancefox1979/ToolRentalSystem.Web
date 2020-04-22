@@ -343,7 +343,7 @@ namespace ToolRentalSystem.Web.Controllers
             return View(list);
         }
 
-        
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Users()
         {
 
