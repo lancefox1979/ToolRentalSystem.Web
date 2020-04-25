@@ -32,7 +32,9 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
             <th>Start Date</th>
             <th>Due Date</th>
             <th>Rental Status</th>
-            <th></th>
+            @if (isAuthorized) {
+                <th></th>
+            }
         </tr>
     </thead>
     <tbody>

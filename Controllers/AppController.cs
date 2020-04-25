@@ -334,7 +334,9 @@ namespace ToolRentalSystem.Web.Controllers
             else
             {
                 list = await _context.Rental
-                    .Where(r => r.RentalStatus.Equals("rented"))
+                    .Where(r => r.RentalStatus.Equals("rented") 
+                        || r.RentalStatus.Equals("reserved") 
+                        || r.RentalStatus.Equals("returned"))
                     .Where(r => r.AspNetUserId.Equals(userId))
                     .AsNoTracking()
                     .ToListAsync();
