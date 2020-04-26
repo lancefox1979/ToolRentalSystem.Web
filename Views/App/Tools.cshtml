@@ -70,8 +70,8 @@ https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-
                     </td>
                 }
                 <td> 
-                    @if (ViewBag.UnavailableToolIds.Contains(item.ToolId)) {
-                        // if the tool is currently rented or reserved it is not available to reserve
+                    @if (ViewBag.UnavailableToolIds.Contains(item.ToolId) || item.ToolStatus == "inactive") {
+                        // if the tool is currently rented, reserved, or inactive it is not available to reserve
                         <div>Not Available</div>
                     } else {
                         <a asp-action="ReserveTool" asp-route-toolid="@item.ToolId">Reserve</a>
