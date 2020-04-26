@@ -19,44 +19,49 @@
 
 @using (Html.BeginForm())
 {
-    if (isAuthorized) { // If user is an admin, choose user id for reservation
+    <div class="input-group">
+
+        @if (isAuthorized) { // If user is an admin, choose user id for reservation
+            <div class="form-group">
+                <label asp-for="AspNetUserId" class="control-label">User ID</label><br />
+                <select asp-for="AspNetUserId" class="form-control" asp-items="ViewBag.AspNetUserDropDownList" required>
+                    <option value="">-- Select a User --</option>
+                </select>
+            </div>
+        } else { // if user is a client, can only reseve for their user id
+            <div class="form-group">
+                <label asp-for="AspNetUserId" class="control-label">User ID</label><br />
+                <input asp-for="AspNetUserId" class="form-control" value="@ViewBag.User.Id" readonly required>
+            </div>
+        }
+        
         <div class="form-group">
-            <label asp-for="AspNetUserId" class="control-label">User ID</label><br />
-            <select asp-for="AspNetUserId" class="form-control" asp-items="ViewBag.AspNetUserDropDownList" required>
-                <option value="">-- Select a User --</option>
-            </select>
+            <label asp-for="ToolId" class="control-label">Tool ID</label><br />
+            <input asp-for="ToolId" class="form-control" value= "@ViewBag.ToolId" readonly required>
+            @*<div>@Html.EditorFor(model => model.ToolType)</div>*@
         </div>
-    } else { // if user is a client, can only reseve for their user id
+
         <div class="form-group">
-            <label asp-for="AspNetUserId" class="control-label">User ID</label><br />
-            <input asp-for="AspNetUserId" class="form-control" value="@ViewBag.User.Id" readonly required>
+            <label asp-for="StartDate" class="control-label">Start Date</label>
+            <input asp-for="StartDate" class="form-control" value="@startDate" readonly>
+            @* <div>@Html.ValidationMessageFor(model => model.StartDate)</div>
+            <div>@Html.EditorFor(model => model.StartDate)</div> *@
         </div>
-    }
 
-     <div class="form-group">
-        <label asp-for="ToolId" class="control-label">Tool ID</label><br />
-        <input asp-for="ToolId" class="form-control" value= "@ViewBag.ToolId" readonly required>
-        @*<div>@Html.EditorFor(model => model.ToolType)</div>*@
+        <div class="form-group">
+            <label asp-for="DueDate" class="control-label">Due Date</label>
+            <input asp-for="DueDate" class="form-control" value="@dueDate" readonly>
+        @* <div>@Html.ValidationMessageFor(model => model.DueDate)</div>
+        <div>@Html.EditorFor(model => model.DueDate)</div> *@
+        </div>
+        
+        <div class="form-group">
+            <input asp-for="RentalStatus" class="form-control" value="reserved" readonly type="hidden" />
+        </div>
+        
     </div>
 
-    <div class="form-group">
-        <label asp-for="StartDate" class="control-label">Start Date</label>
-        <input asp-for="StartDate" class="form-control" value="@startDate" readonly>
-        @* <div>@Html.ValidationMessageFor(model => model.StartDate)</div>
-         <div>@Html.EditorFor(model => model.StartDate)</div> *@
-    </div>
-
-    <div class="form-group">
-        <label asp-for="DueDate" class="control-label">Due Date</label>
-        <input asp-for="DueDate" class="form-control" value="@dueDate" readonly>
-       @* <div>@Html.ValidationMessageFor(model => model.DueDate)</div>
-       <div>@Html.EditorFor(model => model.DueDate)</div> *@
-    </div>
-
-
-    <div class="form-group">
-        <input asp-for="RentalStatus" class="form-control" value="reserved" readonly type="hidden" />
-    </div>
+    <br />
     
     <div class="form-group">
         <input type="submit" value = "Reserve " class="btn btn-default" />
